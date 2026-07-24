@@ -16,16 +16,15 @@ const i = process.argv.indexOf('--fixture');
 const fixturePath = i > -1 ? process.argv[i + 1] : path.join(ROOT, 'test/fixtures/thbwl.json');
 
 const assetsDir = path.join(ROOT, 'dist/assets');
-const chunk = fs.existsSync(assetsDir)
-    && fs.readdirSync(assetsDir).find((f) => f.startsWith('sim-worker') && f.endsWith('.js'));
+const chunk =
+    fs.existsSync(assetsDir) && fs.readdirSync(assetsDir).find((f) => f.startsWith('sim-worker') && f.endsWith('.js'));
 if (!chunk) {
     console.error('no dist/assets/sim-worker*.js — run `npm run build` first');
     process.exit(2);
 }
 
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-const golden = JSON.parse(fs.readFileSync(
-    path.join(ROOT, 'test/golden', path.basename(fixturePath)), 'utf8'));
+const golden = JSON.parse(fs.readFileSync(path.join(ROOT, 'test/golden', path.basename(fixturePath)), 'utf8'));
 
 // Minimal WorkerGlobalScope: the chunk assigns the global `onmessage` handler
 // (legal in strict module code only because the property already exists) and
@@ -72,5 +71,8 @@ if (flurry !== 'Flurry') {
     console.error(`FAIL constructor.name mangled by minification: flurry aura named ${JSON.stringify(flurry)}`);
     failed = 1;
 }
-if (!failed) console.error(`ok   bundle ${path.basename(fixturePath)} via worker protocol (meandps ${meandps.toFixed(2)}, names intact)`);
+if (!failed)
+    console.error(
+        `ok   bundle ${path.basename(fixturePath)} via worker protocol (meandps ${meandps.toFixed(2)}, names intact)`,
+    );
 process.exit(failed);

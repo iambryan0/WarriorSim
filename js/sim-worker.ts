@@ -15,10 +15,7 @@ onmessage = async (event) => {
     // never sets it, so production behavior is unchanged.
     if (params.seed !== undefined) RNG.seed(params.seed);
     if (params.globals.sod) {
-        const [{ gear }, { runes }] = await Promise.all([
-            import('./data/gear_sod.ts'),
-            import('./data/runes.ts'),
-        ]);
+        const [{ gear }, { runes }] = await Promise.all([import('./data/gear_sod.ts'), import('./data/runes.ts')]);
         installModeData({ gear, runes });
     } else {
         const { gear } = await import('./data/gear.ts');
@@ -26,16 +23,21 @@ onmessage = async (event) => {
     }
     updateGlobals(params.globals);
     const player = new Player(...params.player);
-    const sim = new Simulation(player, (report) => {
-        // Finished
-        if (params.fullReport) {
-            report.player = player.serializeStats();
-            report.spread = sim.spread;
-        }
-        postMessage([TYPE.FINISHED, report]);
-    }, (iteration, report) => {
-        // Update
-        postMessage([TYPE.UPDATE, iteration, report]);
-    }, params.sim);
+    const sim = new Simulation(
+        player,
+        (report) => {
+            // Finished
+            if (params.fullReport) {
+                report.player = player.serializeStats();
+                report.spread = sim.spread;
+            }
+            postMessage([TYPE.FINISHED, report]);
+        },
+        (iteration, report) => {
+            // Update
+            postMessage([TYPE.UPDATE, iteration, report]);
+        },
+        params.sim,
+    );
     sim.startSync();
 };

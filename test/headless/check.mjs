@@ -28,9 +28,12 @@ for (const file of fixtures) {
     const golden = fs.readFileSync(goldenPath, 'utf8');
     const seed = JSON.parse(golden).seed;
 
-    const runAt = (s) => execFileSync(process.execPath,
-        [path.join(ROOT, 'test/headless/run.mjs'), '--fixture', path.join(fixturesDir, file), '--seed', String(s)],
-        { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    const runAt = (s) =>
+        execFileSync(
+            process.execPath,
+            [path.join(ROOT, 'test/headless/run.mjs'), '--fixture', path.join(fixturesDir, file), '--seed', String(s)],
+            { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
+        );
 
     if (runAt(seed) !== golden) {
         console.error(`FAIL ${name}: output diverged from golden at seed ${seed}`);

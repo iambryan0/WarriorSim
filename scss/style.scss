@@ -12,7 +12,7 @@ $screen-xl-max: 5000px;
 // media devices
 @mixin mobile {
     @media screen and (max-width: #{$screen-sm-max}) {
-      @content;
+        @content;
     }
 }
 @mixin tablet {
@@ -21,12 +21,11 @@ $screen-xl-max: 5000px;
     }
 }
 
-
-@import "layout";
-@import "components";
-@import "sidebar";
-@import "settings";
-@import "gear";
-@import "stats";
-@import "profiles";
-@import "modal";
+@import 'layout';
+@import 'components';
+@import 'sidebar';
+@import 'settings';
+@import 'gear';
+@import 'stats';
+@import 'profiles';
+@import 'modal';

@@ -32,7 +32,14 @@ updateGlobals(fixture.globals);
 const player = new Player(undefined, undefined, undefined, fixture.playerConfig);
 if (!player.mh) throw new Error('fixture selects no weapon');
 let report = null;
-const sim = new Simulation(player, (r) => { report = r; }, null, fixture.simConfig);
+const sim = new Simulation(
+    player,
+    (r) => {
+        report = r;
+    },
+    null,
+    fixture.simConfig,
+);
 sim.startSync();
 report.player = player.serializeStats();
 const spread = sim.spread;
@@ -59,16 +66,24 @@ const golden = {
     sumdps2: report.sumdps2,
     spread: Object.fromEntries(spread.map((count, dps) => [dps, count]).filter(Boolean)),
     spells: sortedByKey(report.player.spells, (s) =>
-        (s.totaldmg || s.data?.some(Boolean))
-            ? { name: s.name, totaldmg: s.totaldmg, data: s.data }
-            : null),
+        s.totaldmg || s.data?.some(Boolean) ? { name: s.name, totaldmg: s.totaldmg, data: s.data } : null,
+    ),
     auras: sortedByKey(report.player.auras, (a) =>
-        (a.uptime || a.totaldmg)
-            ? { name: a.name, uptime: a.uptime, totaldmg: a.totaldmg ?? 0 }
-            : null),
-    mh: { name: report.player.mh.name, totaldmg: report.player.mh.totaldmg, totalprocdmg: report.player.mh.totalprocdmg, data: report.player.mh.data },
+        a.uptime || a.totaldmg ? { name: a.name, uptime: a.uptime, totaldmg: a.totaldmg ?? 0 } : null,
+    ),
+    mh: {
+        name: report.player.mh.name,
+        totaldmg: report.player.mh.totaldmg,
+        totalprocdmg: report.player.mh.totalprocdmg,
+        data: report.player.mh.data,
+    },
     oh: report.player.oh
-        ? { name: report.player.oh.name, totaldmg: report.player.oh.totaldmg, totalprocdmg: report.player.oh.totalprocdmg, data: report.player.oh.data }
+        ? {
+              name: report.player.oh.name,
+              totaldmg: report.player.oh.totaldmg,
+              totalprocdmg: report.player.oh.totalprocdmg,
+              data: report.player.oh.data,
+          }
         : null,
     trace: trace.slice(0, traceLimit),
 };

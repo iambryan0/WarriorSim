@@ -5,7 +5,9 @@
     color: #ddd;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease-in, color 0.2s ease-in;
+    transition:
+        all 0.2s ease-in,
+        color 0.2s ease-in;
     float: none;
     text-align: center;
     font-size: 12px;
@@ -112,7 +114,7 @@
         margin: 0;
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
         margin: 0;
         vertical-align: middle;
         cursor: pointer;
@@ -156,10 +158,10 @@
         margin-left: 8px;
         color: green;
         &:before {
-            content: "(+";
+            content: '(+';
         }
         &:after {
-            content: ")";
+            content: ')';
         }
     }
 
@@ -167,10 +169,10 @@
         margin-left: 8px;
         color: red;
         &:before {
-            content: "(";
+            content: '(';
         }
         &:after {
-            content: ")";
+            content: ')';
         }
     }
 }
@@ -239,10 +241,11 @@
     &:hover {
         opacity: 1;
     }
-    &:before, &:after {
+    &:before,
+    &:after {
         position: absolute;
         left: 9px;
-        content: " ";
+        content: ' ';
         height: 20px;
         width: 2px;
         background-color: #ccc;
@@ -270,7 +273,7 @@
     color: #721c24;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     padding: 10px 20px;
     line-height: 16px;
     width: 90%;
@@ -286,11 +289,11 @@
 }
 @keyframes fadeInUp {
     from {
-        opacity:0;
+        opacity: 0;
         transform: translatey(20px);
     }
     to {
-        opacity:1;
+        opacity: 1;
         transform: translatey(0);
     }
 }

@@ -8,4 +8,4 @@ declare var mode: string | undefined;
 declare var whTooltips: any;
 
 // Vite resolves stylesheet imports from entry modules.
-declare module "*.scss";
+declare module '*.scss';
