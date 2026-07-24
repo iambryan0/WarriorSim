@@ -1,4 +1,4 @@
-var runes = {
+export const runes = {
    "chest": [
       {
          id: 402877,
@@ -210,3 +210,4 @@ var runes = {
         },
     ],
 };
+

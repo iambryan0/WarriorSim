@@ -26,7 +26,7 @@ const seed = parseInt(arg('seed', fixture.seed ?? 42), 10);
 const traceLimit = parseInt(arg('trace', 400), 10);
 
 const trace = [];
-const ctx = createEngineContext({ sod: fixture.globals.sod !== false, trace });
+const ctx = await createEngineContext({ sod: fixture.globals.sod !== false, trace });
 seedContext(ctx, seed);
 
 ctx.__globals = fixture.globals;

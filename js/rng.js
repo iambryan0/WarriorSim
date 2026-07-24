@@ -3,7 +3,7 @@
 // parity harness, and later the Rust engine validation) call RNG.seed(n),
 // which swaps in mulberry32 — the same algorithm both engines must share so
 // that a given seed produces an identical event sequence.
-var RNG = {
+export const RNG = {
     random: Math.random,
     seed(seed) {
         let a = seed >>> 0;
@@ -19,3 +19,7 @@ var RNG = {
         this.random = Math.random;
     },
 };
+
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { RNG });

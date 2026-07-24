@@ -1,4 +1,4 @@
-var gear = {
+export const gear = {
   "head": [
     {
       "id": 1280,

@@ -1,4 +1,4 @@
-var enchant = {
+export const enchant = {
    "mainhand": [
      {
        "id": 211845,
@@ -964,7 +964,7 @@ var enchant = {
      }
    ]
  };
- var sets = [
+export const sets = [
    {
       id: 143,
       name: 'Devilsaur Armor',
@@ -1484,3 +1484,7 @@ var enchant = {
 
 
 ];
+
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { enchant, sets });

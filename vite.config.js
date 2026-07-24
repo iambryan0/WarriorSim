@@ -18,7 +18,11 @@ const copyLegacyJs = () => ({
 
 export default defineConfig({
     build: {
+        // The engine defaults aura/spell display names to constructor.name
+        // (spell.js Spell/Aura constructors) — class names must survive
+        // minification.
         rollupOptions: {
+            output: { keepNames: true },
             input: {
                 sod: resolve(root, 'index.html'),
                 classic: resolve(root, 'classic.html'),

@@ -1,4 +1,27 @@
-class Player {
+import { RNG } from '../rng.js';
+import { rng, rng10k, step, RESULT, DEFENSETYPE, SCHOOL } from './simulation.js';
+import { Weapon, WEAPONTYPE } from './weapon.js';
+import {
+    createSpell,
+    // direct aura/stance instantiations
+    BattleForecast, BattleStance, BerserkerRageAura, BerserkerStance,
+    BloodrageAura, DeepWounds, DefendersResolve, DefensiveStance, DefForecast,
+    EchoesBattle, EchoesDef, EchoesGlad, EchoesZerk, Flurry, FreshMeat,
+    GladForecast, GladiatorStance, ObsidianHaste, ObsidianStrength,
+    OldDeepWounds, SingleMinded, StanceSwitch, SuddenDeath, TheMoltenCore,
+    VoodooFrenzy, WreckingCrew, ZerkForecast,
+    // instanceof checks
+    Bloodthirst, Cleave, Execute, HeroicStrike, MortalStrike, Overpower,
+    QuickStrike, ShieldSlam, Slam, SunderArmor, ThunderClap, Whirlwind,
+} from './spell.js';
+import { gear, runes } from '../data/mode.js';
+import { buffs } from '../data/buffs.js';
+import { enchant, sets } from '../data/enchants.js';
+import { levelstats } from '../data/levelstats.js';
+import { spells } from '../data/spells.js';
+import { talents } from '../data/talents.js';
+
+export class Player {
     static getConfig(base) {
         return {
             level: $('input[name="level"]').val(),
@@ -269,7 +292,7 @@ class Player {
                         proc.magicdmg = item.proc.dmg;
                         proc.cooldown = item.proc.cooldown;
                         if (item.spell) {
-                            this.auras[item.proc.spell.toLowerCase()] = eval('new ' + item.proc.spell + '(this)');
+                            this.auras[item.proc.spell.toLowerCase()] = createSpell(item.proc.spell, this);
                             proc.spell = this.auras[item.proc.spell.toLowerCase()];
                         }
                         this["trinketproc" + (this.trinketproc1 ? 2 : 1)] = proc;
@@ -279,7 +302,7 @@ class Player {
                         proc.chance = item.proc.chance * 100;
                         if (item.proc.dmg) proc.magicdmg = item.proc.dmg;
                         if (item.proc.spell) {
-                            this.auras[item.proc.spell.toLowerCase()] = eval('new ' + item.proc.spell + '(this)');
+                            this.auras[item.proc.spell.toLowerCase()] = createSpell(item.proc.spell, this);
                             proc.spell = this.auras[item.proc.spell.toLowerCase()];
                         }
                         if (this.attackproc2) console.log("Warning! overlapping attack procs!");
@@ -506,7 +529,7 @@ class Player {
                         proc.chance = bonus.stats.procchance * 100;
                         if (bonus.stats.magicdmg) proc.magicdmg = bonus.stats.magicdmg;
                         if (bonus.stats.procspell) {
-                            this.auras[bonus.stats.procspell.toLowerCase()] = eval('new ' + bonus.stats.procspell + '(this)');
+                            this.auras[bonus.stats.procspell.toLowerCase()] = createSpell(bonus.stats.procspell, this);
                             proc.spell = this.auras[bonus.stats.procspell.toLowerCase()];
                         } 
                         if (this.attackproc2) console.log("Warning! overlapping attack procs!");
@@ -664,8 +687,8 @@ class Player {
             if (spell.active || (spell.item && this.items.includes(spell.id) && (spell.timetoendactive || spell.timetostartactive))) {
                 if (!spell.aura && this.mh.type == WEAPONTYPE.FISHINGPOLE) continue; 
                 if (spell.item && !this.items.includes(spell.id)) continue;
-                if (spell.aura) this.auras[spell.classname.toLowerCase()] = eval(`new ${spell.classname}(this, ${spell.id})`);
-                else this.spells[spell.classname.toLowerCase()] = eval(`new ${spell.classname}(this, ${spell.id})`);
+                if (spell.aura) this.auras[spell.classname.toLowerCase()] = createSpell(spell.classname, this, spell.id);
+                else this.spells[spell.classname.toLowerCase()] = createSpell(spell.classname, this, spell.id);
                 this.preporder.push(spell);
             }
         }
@@ -1755,3 +1778,7 @@ class Player {
             (this.auras.berserkerrage && this.auras.berserkerrage.timer);
     }
 }
+
+// Interim ESM-migration shim: classic scripts (ui.js) still reference Player
+// by bare global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { Player });

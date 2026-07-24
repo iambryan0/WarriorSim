@@ -1,5 +1,5 @@
 // race,class,level,str,agi,sta,inte,spi
-var levelstats = [
+export const levelstats = [
     "1,1,1,23,20,22,20,21",
     "1,1,2,24,21,23,20,21",
     "1,1,3,25,21,24,20,22",
@@ -480,3 +480,6 @@ var levelstats = [
     "8,1,58,116,79,107,26,45",
     "8,1,59,119,81,109,26,45",
     "8,1,60,121,82,111,26,46"];
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { levelstats });

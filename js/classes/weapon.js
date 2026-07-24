@@ -1,4 +1,10 @@
-var WEAPONTYPE = {
+import { rng } from './simulation.js';
+import { createSpell, Crusader, HeroicStrike, WeaponBleed, Windfury } from './spell.js';
+import { enchant } from '../data/enchants.js';
+import { buffs } from '../data/buffs.js';
+import { spells } from '../data/spells.js';
+
+export const WEAPONTYPE = {
     MACE: 0,
     SWORD: 1,
     DAGGER: 2,
@@ -17,7 +23,7 @@ var WEAPONTYPE = {
 
 }
 
-class Weapon {
+export class Weapon {
     constructor(player, item, enchant, tempenchant, offhand, twohand) {
         this.player = player;
         this.id = item.id;
@@ -71,7 +77,7 @@ class Weapon {
             // custom spells
             if (item.proc.spell) {
                 if (!player.auras[item.proc.spell.toLowerCase()]) {
-                    player.auras[item.proc.spell.toLowerCase()] = eval('new ' + item.proc.spell + '(player)');
+                    player.auras[item.proc.spell.toLowerCase()] = createSpell(item.proc.spell, player);
                 }
                 this.proc1.spell = player.auras[item.proc.spell.toLowerCase()];
             }

@@ -1,4 +1,4 @@
-var talents = [
+export const talents = [
    {
       n: 'Arms',
       t: [
@@ -1128,3 +1128,7 @@ var talents = [
       ]
    }
 ];
+
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { talents });

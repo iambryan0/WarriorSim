@@ -1,4 +1,10 @@
-var RESULT = {
+import { RNG } from '../rng.js';
+import { spells } from '../data/spells.js';
+import { talents } from '../data/talents.js';
+import { getGlobalsDelta } from '../globals.js';
+import { BlademasterFury, Shockwave, Slam, ThunderClap, Whirlwind } from './spell.js';
+
+export const RESULT = {
     HIT: 0,
     MISS: 1,
     DODGE: 2,
@@ -6,14 +12,14 @@ var RESULT = {
     GLANCE: 4
 }
 
-var DEFENSETYPE = {
+export const DEFENSETYPE = {
     NONE: 0,
     MAGIC: 1,
     MELEE: 2,
     RANGED: 3,
 }
 
-var SCHOOL = {
+export const SCHOOL = {
     NONE: 0,
     PHYSICAL: 1,
     HOLY: 2,
@@ -25,19 +31,19 @@ var SCHOOL = {
 }
 
 
-var batching = 0;
-var step = 0;
+export let batching = 0;
+export let step = 0;
 var version = 4;
 
-const TYPE = {
+export const TYPE = {
     UPDATE: 0,
     FINISHED: 1,
     ERROR: 2,
 }
 
-class SimulationWorker {
+export class SimulationWorker {
     constructor(callback_finished, callback_update, callback_error) {
-        this.worker = new Worker('/js/sim-worker.js');
+        this.worker = new Worker('/js/sim-worker.js', { type: 'module' });
         this.worker.onerror = (...args) => {
             callback_error(...args);
             this.worker.terminate();
@@ -69,7 +75,7 @@ class SimulationWorker {
     }
 }
 
-class SimulationWorkerParallel {
+export class SimulationWorkerParallel {
     constructor(threads, callback_finished, callback_update, callback_error) {
         this.threads = threads;
         this.callback_finished = callback_finished;
@@ -173,7 +179,7 @@ class SimulationWorkerParallel {
     }
 }
 
-class Simulation {
+export class Simulation {
     static getConfig() {
         return {
             timesecsmin: parseInt($('input[name="timesecsmin"]').val()),
@@ -727,14 +733,18 @@ class Simulation {
     }
 }
 
-function rng(min, max) {
+export function rng(min, max) {
     return ~~(RNG.random() * (max - min + 1) + min);
 }
 
-function rng10k() {
+export function rng10k() {
     return ~~(RNG.random() * 10000);
 }
 
 function avg(min, max) {
     return (min + max) / 2;
 }
+
+// Interim ESM-migration shim: classic scripts (ui.js) still reference these
+// by bare global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { Simulation, SimulationWorker, SimulationWorkerParallel });

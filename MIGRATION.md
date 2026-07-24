@@ -6,6 +6,46 @@ questions.
 
 ## Phase 1 — Vite + TypeScript migration
 
+### Engine to ES modules (branch `phase1/esm-engine`)
+- All engine-loaded files are now real ES modules with explicit imports:
+  `rng.js`, every `js/data/*`, the four `js/classes/*`, `js/globals.js`.
+  Tables went `var` → `export const` with no content changes (they are
+  mutated in place, never reassigned — verified before converting).
+  `step`/`batching` are `export let` in simulation.js, written only there,
+  read elsewhere through live bindings. The engine module graph is acyclic
+  except simulation ↔ spell (runtime-only references, safe under ESM).
+- Mode selection is explicit now: new `js/data/mode.js` holds `gear`/`runes`
+  live bindings, installed by the page entries (`main-sod.js` /
+  `main-classic.js`) or by the worker from its first message via dynamic
+  import — replacing the old "which script tag loaded" mechanism. `runes`
+  stays undefined in classic mode so the engine's `typeof runes` guards
+  behave identically.
+- `eval('new ' + name + '(...)')` (6 sites) replaced by
+  `createSpell()`/`SPELL_CLASSES`, an explicit map of all 82 classes the data
+  files reference by string (scan covered quoted and unquoted
+  `spell`/`procspell`/`classname` keys; first scan missed the JSON-quoted
+  ones — caught by the parity gate). Unknown names now throw.
+- `js/sim-worker.js` is a module worker (`{ type: 'module' }`), same message
+  protocol. UI files stay classic scripts for now and reach the engine
+  through interim `Object.assign(globalThis, ...)` shims at module ends —
+  tracked for removal when the UI converts.
+- Parity harness upgrades:
+  - sandbox loads mixed classic/ESM engine files in ONE vm context
+    (`vm.SourceTextModule`, `--experimental-vm-modules`; the flag drops out
+    once the harness can import the engine natively). A first attempt at
+    global-realm `(0, eval)` loading failed — top-level `class` declarations
+    do not persist across indirect evals, unlike real `<script>` tags.
+  - new `test/headless/check-bundle.mjs` runs a fixture through the MINIFIED
+    Vite build and byte-compares aggregates against the golden. It caught
+    the one real minification hazard: Spell/Aura default their display name
+    to `constructor.name`, so the build sets rolldown `output.keepNames`
+    (Vite 8 silently ignores `terserOptions` — verified empirically).
+- Verified: 11/11 goldens byte-identical (exit code checked — an earlier
+  piped `tail` masked a real failure once; lesson noted), bundle check exact
+  on meandps + intact class names, classic-mode context loads, built site
+  serves, dev server transforms the module worker.
+- Deleted `js/data/races.js` (no consumers; Phase 0 open question resolved).
+
 ### Vite replaces gulp (branch `phase1/vite-build`)
 - `vite.config.js`: MPA build with `index.html` + `classic.html` as inputs;
   `npm run dev/build/preview`. gulp, its deps, and the committed `dist/`
@@ -76,5 +116,6 @@ questions.
 ## Open questions
 - `version = 4` in simulation.js is written but never read anywhere found so
   far — confirm before dropping during the TS migration.
-- `js/data/races.js` is loaded by neither page nor worker (race data is
-  hardcoded in `Player.addRace`) — candidate for deletion in Phase 1.
+- All 11 parity fixtures are SoD-mode (they derive from the shipped presets,
+  which are SoD-only). Classic mode is covered by a load smoke test but has
+  no golden — worth adding a hand-built classic fixture before Phase 3.
