@@ -6,6 +6,22 @@ questions.
 
 ## Phase 2 — Data layer + engine hardening
 
+### Engine under strict: true (branch `phase2/engine-strict`)
+
+- `tsconfig.engine.json` is `strict: true` now (was noImplicitAny only).
+  Only 34 errors surfaced — the Player/Spell/Aura index signatures absorb
+  most strictness; that remains the documented typing debt.
+- Fixes were type-level or provably equivalent: `mode` optional in
+  PlayerConfig (undefined on the DOM path before mode.ts installs);
+  `let spell/prepull` explicit `any` (strict infers `null`/`never[]`);
+  widened id params to `number | null` (DeepWounds passes null); widened
+  addRage/dealdamage optional params; declared `mh`/`oh` fields on Player
+  (`declare` — zero emit, enables narrowing); non-null asserts in castoh
+  (dual-wield-only path) and the dodge-rage branch; `item.haste ?? 0` in the
+  stat loops (the old `1 + undefined/100 || 1` collapsed to 1 the same way).
+- Verified: both tsc projects clean, vitest 48/48, parity 11/11
+  byte-identical, minified bundle check exact, eslint/prettier clean.
+
 ### Data-layer schemas and validation (branch `phase2/data-schemas`)
 
 - `js/data/schemas.ts` (Zod): Item, Buff, Enchant, ItemSet, Rune,

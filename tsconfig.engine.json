@@ -4,7 +4,7 @@
         // Stricter project for the engine (PROMPT.MD Phase 1 step 4:
         // noImplicitAny per-directory, starting with classes/). The UI stays
         // on the permissive root config; `npm run typecheck` runs both.
-        "noImplicitAny": true
+        "strict": true
     },
     "include": [
         "js/classes/**/*.ts",

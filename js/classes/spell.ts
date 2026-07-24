@@ -5,7 +5,7 @@ import { spells } from '../data/spells.ts';
 
 export class Spell {
     [key: string]: any;
-    constructor(player: Player, id?: number, name?: string) {
+    constructor(player: Player, id?: number | null, name?: string) {
         this.id = id;
         this.timer = 0;
         this.cost = 0;
@@ -983,7 +983,7 @@ export class GrilekFury extends Spell {
 
 export class Aura {
     [key: string]: any;
-    constructor(player: Player, id?: number, name?: string) {
+    constructor(player: Player, id?: number | null, name?: string) {
         this.id = id;
         this.timer = 0;
         this.starttimer = 0;
@@ -1132,7 +1132,7 @@ export class Flurry extends Aura {
 }
 
 export class DeepWounds extends Aura {
-    constructor(player: Player, id?: number, adjacent?: number) {
+    constructor(player: Player, id?: number | null, adjacent?: number) {
         super(player, id, 'Deep Wounds' + (adjacent ? ' ' + adjacent : ''));
         this.duration = 12;
         this.idmg = 0;
@@ -1217,7 +1217,7 @@ export class DeepWounds extends Aura {
 }
 
 export class OldDeepWounds extends Aura {
-    constructor(player: Player, id?: number, adjacent?: number) {
+    constructor(player: Player, id?: number | null, adjacent?: number) {
         super(player, id, 'Deep Wounds' + (adjacent ? ' ' + adjacent : ''));
         this.duration = 12;
         this.idmg = 0;
