@@ -1,0 +1,24 @@
+dist/
+public/
+gear/
+old/
+# Static data tables — regenerated/validated by schema in Phase 2; keeping
+# their original layout makes upstream diffs readable.
+js/data/buffs.ts
+js/data/enchants.ts
+js/data/gear.ts
+js/data/gear_sod.ts
+js/data/levelstats.ts
+js/data/presets.ts
+js/data/runes.ts
+js/data/session.ts
+js/data/session_sod.ts
+js/data/spells.ts
+js/data/talents.ts
+test/fixtures/
+test/golden/
+package-lock.json
+# Legacy hand-written pages (prettier fails to parse their markup).
+index.html
+classic.html
+.claude/

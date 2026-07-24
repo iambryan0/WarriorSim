@@ -16,7 +16,7 @@
         .wrapper {
             opacity: 1;
             transition: opacity 0.2s ease-in;
-            transition-delay: .3s;
+            transition-delay: 0.3s;
         }
     }
 
@@ -51,8 +51,9 @@
             padding: 0 10px;
             font-size: 14px;
         }
-        
-        &:nth-child(1), &:nth-child(4) {
+
+        &:nth-child(1),
+        &:nth-child(4) {
             width: 100%;
             display: block;
         }
@@ -76,7 +77,7 @@
             canvas {
                 height: 250px;
             }
-        } 
+        }
     }
 
     .legend {
@@ -123,7 +124,7 @@
 
     @include mobile {
         z-index: 11;
-        
+
         &.active {
             width: 100%;
             left: 0;

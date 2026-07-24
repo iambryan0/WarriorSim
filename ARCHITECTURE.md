@@ -52,7 +52,7 @@ The `player` ctor array supports the item/enchant/stat-weight comparison runs:
 
 - Time is integer **milliseconds** in the module-global `step`; per-iteration
   fight length `maxsteps = rng(timesecsmin*1000, timesecsmax*1000)`.
-- It is a *next-event* loop, not a fixed tick: each pass handles anything due
+- It is a _next-event_ loop, not a fixed tick: each pass handles anything due
   now (auto-attacks when `mh.timer <= 0`, delayed ability casts, HS queue,
   slam cast completion, extra attacks), then computes `next` = minimum over
   every pending timer (weapon swings, GCD `player.timer`, item/stance/rage
@@ -102,11 +102,11 @@ attacks at `batching - step % batching` (simulation.js:514), `Execute` has a
 
 All engine randomness is `Math.random()` behind three helpers:
 
-| Site | Definition | Used for |
-|---|---|---|
-| `rng(min,max)` simulation.js:730 | inclusive int | fight length, damage ranges, reaction delay, adjacent DoT target pick |
-| `rng10k()` simulation.js:734 | int 0-9999 | every attack-table roll and proc chance |
-| `Player.getGlanceReduction` player.js:992 | uniform float | glance damage multiplier |
+| Site                                      | Definition    | Used for                                                              |
+| ----------------------------------------- | ------------- | --------------------------------------------------------------------- |
+| `rng(min,max)` simulation.js:730          | inclusive int | fight length, damage ranges, reaction delay, adjacent DoT target pick |
+| `rng10k()` simulation.js:734              | int 0-9999    | every attack-table roll and proc chance                               |
+| `Player.getGlanceReduction` player.js:992 | uniform float | glance damage multiplier                                              |
 
 `ui.js:1546` (uuid) and `settings.js:798-801` (snow easter egg) are UI-only.
 `spell.js` and `weapon.js` contain no direct randomness.

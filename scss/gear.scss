@@ -1,4 +1,3 @@
-
 section.main {
     min-height: 100vh;
     width: 100%;
@@ -30,7 +29,6 @@ section.main {
         font-size: 0;
         display: inline-block;
         vertical-align: top;
-        
     }
     li {
         padding: 0;
@@ -44,7 +42,7 @@ section.main {
             position: relative;
             border-width: 2px;
             &:after {
-                content: "";
+                content: '';
                 display: block;
                 position: absolute;
                 left: 0;
@@ -62,7 +60,8 @@ section.main {
                 filter: none;
             }
         }
-        &:hover, &.active {
+        &:hover,
+        &.active {
             color: white;
             .icon {
                 border-color: $icon-border;
@@ -108,31 +107,44 @@ section.main {
                 display: none;
             }
         }
-        &.active[data-type="profiles"],
-        &.active[data-type="mainhand"],
-        &.active[data-type="offhand"],
-        &.active[data-type="twohand"] {
+        &.active[data-type='profiles'],
+        &.active[data-type='mainhand'],
+        &.active[data-type='offhand'],
+        &.active[data-type='twohand'] {
             margin-bottom: 30px;
             @media only screen and (max-width: 1600px) {
                 margin-bottom: 0;
             }
         }
-        &[data-type="ranged"] {
+        &[data-type='ranged'] {
             margin-right: 20px;
         }
-        &[data-type="wrist"] {
+        &[data-type='wrist'] {
             margin-right: 20px;
         }
-        &:hover[data-type="mainhand"] .icon:after { content: 'MH'; }
-        &:hover[data-type="offhand"] .icon:after { content: 'OH'; }
-        &:hover[data-type="twohand"] .icon:after { content: '2H'; }
-        
+        &:hover[data-type='mainhand'] .icon:after {
+            content: 'MH';
+        }
+        &:hover[data-type='offhand'] .icon:after {
+            content: 'OH';
+        }
+        &:hover[data-type='twohand'] .icon:after {
+            content: '2H';
+        }
     }
 
-    [data-quality="2"] { color: $item-uncommon; }
-    [data-quality="3"] { color: $item-rare; }
-    [data-quality="4"] { color: $item-epic; }
-    [data-quality="5"] { color: $item-legendary; }
+    [data-quality='2'] {
+        color: $item-uncommon;
+    }
+    [data-quality='3'] {
+        color: $item-rare;
+    }
+    [data-quality='4'] {
+        color: $item-epic;
+    }
+    [data-quality='5'] {
+        color: $item-legendary;
+    }
 
     .table-container {
         padding: 20px 40px;
@@ -154,7 +166,8 @@ section.main {
                 float: left;
             }
         }
-        .js-import, .js-export {
+        .js-import,
+        .js-export {
             float: left;
             margin-right: 20px;
         }
@@ -192,7 +205,7 @@ section.main {
         }
     }
 
-    table.gear:not([data-type="custom"]) {
+    table.gear:not([data-type='custom']) {
         th:first-child {
             width: 10px;
         }
@@ -213,7 +226,8 @@ section.main {
         -webkit-appearance: none;
         opacity: 0.5;
         display: none;
-        &[value="0"], &[value="100"] {
+        &[value='0'],
+        &[value='100'] {
             display: none;
         }
     }
@@ -280,7 +294,6 @@ section.main {
         }
     }
 
-    
     .search {
         position: relative;
         width: 222px;
@@ -288,7 +301,7 @@ section.main {
             background: #171717;
             color: white;
             border-radius: 5px;
-            border: 1px solid hsla(0,0%,87%,.4);
+            border: 1px solid hsla(0, 0%, 87%, 0.4);
             padding: 5px 10px;
             width: 200px;
         }
@@ -321,24 +334,23 @@ section.main {
             font-size: 13px;
             cursor: pointer;
             &:before {
-                content: "";
+                content: '';
                 width: 18px;
                 height: 18px;
                 line-height: 18px;
                 background: #171717;
                 border-radius: 3px;
-                border: 1px solid hsla(0,0%,87%,.4);;
+                border: 1px solid hsla(0, 0%, 87%, 0.4);
                 font-size: 12px;
                 text-align: center;
                 margin-right: 6px;
                 display: block;
             }
             &.active:before {
-                content: "✔";
+                content: '✔';
             }
         }
     }
-
 
     @include tablet {
         th:not(:nth-child(2)):not(:first-child):not(:last-child) {
@@ -354,5 +366,3 @@ section.main {
         box-sizing: border-box;
     }
 }
-
-

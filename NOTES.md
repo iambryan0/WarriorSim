@@ -33,6 +33,7 @@ fixed — see PROMPT.MD constraints), fork triage, performance baselines.
 candidates only.
 
 **Cherry-pick candidate:**
+
 - `matvb90/WarriorSim` `3d8cec1` (May 2026, 1 ahead / 0 behind): adds a
   "Positive Charge" buff (spell 28059, Thaddius polarity, `dmgmod`/
   `spelldmgmod` 190) to `buffs.js`. Clean and additive on current upstream.
@@ -40,6 +41,7 @@ candidates only.
   verification before adopting.
 
 **Noted, not candidates:**
+
 - `goreblaster/WarriorSimEpoch` (6 ahead / 0 behind): Project Epoch total
   conversion (sod->epoch rename, rune removal) — a divergent product, but
   proof people still fork this codebase for new servers; the Phase 1+

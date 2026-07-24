@@ -26,28 +26,28 @@
         height: 100%;
         opacity: 0.1;
         pointer-events: none;
-        &[data-race="Human"] {
+        &[data-race='Human'] {
             background-image: url(/img/human.png);
         }
-        &[data-race="Gnome"] {
+        &[data-race='Gnome'] {
             background-image: url(/img/gnome.png);
         }
-        &[data-race="Dwarf"] {
+        &[data-race='Dwarf'] {
             background-image: url(/img/dwarf.png);
         }
-        &[data-race="Night Elf"] {
+        &[data-race='Night Elf'] {
             background-image: url(/img/nightelf.png);
         }
-        &[data-race="Orc"] {
+        &[data-race='Orc'] {
             background-image: url(/img/orc.png);
         }
-        &[data-race="Undead"] {
+        &[data-race='Undead'] {
             background-image: url(/img/undead.png);
         }
-        &[data-race="Tauren"] {
+        &[data-race='Tauren'] {
             background-image: url(/img/tauren.png);
         }
-        &[data-race="Troll"] {
+        &[data-race='Troll'] {
             background-image: url(/img/troll.png);
         }
     }
@@ -65,7 +65,7 @@
 
     .character {
         padding: 20px 0;
-        
+
         & > p {
             text-align: center;
             font-size: 14px;
@@ -87,7 +87,7 @@
     }
 
     li {
-        border-bottom: 1px solid rgba(221,221,221,0.4);
+        border-bottom: 1px solid rgba(221, 221, 221, 0.4);
         padding: 7px 10px;
         overflow: hidden;
         font-size: 12px;
@@ -149,7 +149,8 @@
         }
 
         .loading {
-            .stat-dps, .stat-error {
+            .stat-dps,
+            .stat-error {
                 display: none;
             }
         }
@@ -169,7 +170,7 @@
             font-weight: bold;
             color: $item-uncommon;
             &:after {
-                content: " DPS";
+                content: ' DPS';
                 font-size: 12px;
             }
             &:empty:after {
@@ -181,7 +182,7 @@
             font-weight: bold;
             color: $item-uncommon;
             &:before {
-                content: " \00b1";
+                content: ' \00b1';
             }
             &:empty:before {
                 display: none;
@@ -200,7 +201,7 @@
         color: $item-uncommon;
         height: 34px;
         &:after {
-            content: " DPS";
+            content: ' DPS';
             font-size: 14px;
         }
         &:empty:after {
@@ -213,7 +214,7 @@
         color: $item-uncommon;
         margin-left: 4px;
         &:before {
-            content: " \00b1";
+            content: ' \00b1';
         }
         &:empty:before {
             display: none;
@@ -227,7 +228,7 @@
         margin-bottom: 20px;
         min-height: 19px;
         &:after {
-            content: " s";
+            content: ' s';
         }
         &:empty:after {
             display: none;
@@ -332,7 +333,7 @@
     }
 
     .menu-button::after {
-    content: '';
+        content: '';
         margin-top: 8px;
     }
 
@@ -377,7 +378,8 @@
                 height: 60px;
                 min-height: 60px;
                 border-top: 2px solid #717171;
-                .btn, .dps {
+                .btn,
+                .dps {
                     display: block;
                 }
             }

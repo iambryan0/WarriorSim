@@ -1,8 +1,6 @@
 import { rng } from './simulation.ts';
 import { createSpell, Crusader, HeroicStrike, WeaponBleed, Windfury } from './spell.ts';
-import { enchant } from '../data/enchants.ts';
 import { buffs } from '../data/buffs.ts';
-import { spells } from '../data/spells.ts';
 
 export const WEAPONTYPE = {
     MACE: 0,
@@ -19,9 +17,7 @@ export const WEAPONTYPE = {
     MACE_2H: 20,
     SWORD_2H: 21,
     AXE_2H: 23,
-    
-
-}
+};
 
 export class Weapon {
     [key: string]: any;
@@ -34,7 +30,9 @@ export class Weapon {
         this.basemindmg = item.mindmg;
         this.basemaxdmg = item.maxdmg;
         this.type = item.type;
-        this.modifier = offhand ? 0.5 * (1 + player.talents.offmod) * (1 + player.talents.onemod) : 1 + player.talents.onemod;
+        this.modifier = offhand
+            ? 0.5 * (1 + player.talents.offmod) * (1 + player.talents.onemod)
+            : 1 + player.talents.onemod;
         if (twohand) this.modifier = 1 + player.talents.twomod;
         this.speed = item.speed;
         this.timer = 0;
@@ -44,10 +42,10 @@ export class Weapon {
         this.crit = 0;
         this.basebonusdmg = 0;
         this.bonusdmg = 0;
-        this.type = WEAPONTYPE[item.type.replace(' ','').toUpperCase()] || 0;
+        this.type = WEAPONTYPE[item.type.replace(' ', '').toUpperCase()] || 0;
         this.totaldmg = 0;
         this.totalprocdmg = 0;
-        this.data = [0,0,0,0,0];
+        this.data = [0, 0, 0, 0, 0];
         if (this.type == WEAPONTYPE.AXE) this.crit += player.talents.axecrit;
         if (this.type == WEAPONTYPE.POLEARM) this.crit += player.talents.polearmcrit;
         if (this.type == WEAPONTYPE.DAGGER) this.normSpeed = 1.7;
@@ -55,7 +53,9 @@ export class Weapon {
 
         if (item.proc) {
             this.proc1 = {};
-            this.proc1.chance = item.proc.chance ? item.proc.chance * 100 : ~~(item.speed * (item.proc.ppm || 1) / 0.006);
+            this.proc1.chance = item.proc.chance
+                ? item.proc.chance * 100
+                : ~~((item.speed * (item.proc.ppm || 1)) / 0.006);
             if (item.proc.dmg && !item.proc.magic) this.proc1.physdmg = item.proc.dmg;
             if (item.proc.dmg && item.proc.magic) this.proc1.magicdmg = item.proc.dmg;
             if (item.proc.binaryspell) this.proc1.binaryspell = true;
@@ -67,13 +67,20 @@ export class Weapon {
             // dont need an aura, just add the dmg
             if (item.proc.tick && !item.proc.bleed) {
                 let ticks = parseInt(item.proc.duration) / parseInt(item.proc.interval);
-                if (item.proc.magic) this.proc1.magicdmg = (item.proc.dmg || 0) + (item.proc.tick * ticks);
-                else this.proc1.physdmg = (item.proc.dmg || 0) + (item.proc.tick * ticks);
+                if (item.proc.magic) this.proc1.magicdmg = (item.proc.dmg || 0) + item.proc.tick * ticks;
+                else this.proc1.physdmg = (item.proc.dmg || 0) + item.proc.tick * ticks;
             }
             // bleeds need aura
             if (item.proc.tick && item.proc.bleed) {
-                player.auras["weaponbleed" + (this.offhand ? 'oh' : 'mh')] = new WeaponBleed(player, 0, item.proc.duration, item.proc.interval, item.proc.tick, this.offhand);
-                this.proc1.spell = player.auras["weaponbleed" + (this.offhand ? 'oh' : 'mh')];
+                player.auras['weaponbleed' + (this.offhand ? 'oh' : 'mh')] = new WeaponBleed(
+                    player,
+                    0,
+                    item.proc.duration,
+                    item.proc.interval,
+                    item.proc.tick,
+                    this.offhand,
+                );
+                this.proc1.spell = player.auras['weaponbleed' + (this.offhand ? 'oh' : 'mh')];
             }
             // custom spells
             if (item.proc.spell) {
@@ -83,10 +90,10 @@ export class Weapon {
                 this.proc1.spell = player.auras[item.proc.spell.toLowerCase()];
             }
         }
-        
+
         if (enchant && (enchant.ppm || enchant.chance)) {
             this.proc2 = {};
-            if (enchant.ppm) this.proc2.chance = ~~(this.speed * enchant.ppm / 0.006);
+            if (enchant.ppm) this.proc2.chance = ~~((this.speed * enchant.ppm) / 0.006);
             if (enchant.chance) this.proc2.chance = enchant.chance * 100;
             if (enchant.magicdmg) this.proc2.magicdmg = enchant.magicdmg;
             if (enchant.procspell && !offhand) {
@@ -102,7 +109,7 @@ export class Weapon {
         }
 
         for (let buff of buffs) {
-            if (buff.group == "windfury" && buff.active) {
+            if (buff.group == 'windfury' && buff.active) {
                 if (!this.player.auras.windfury && !this.offhand) {
                     this.player.auras.windfury = new Windfury(this.player, buff.id);
                     this.windfury = this.player.auras.windfury;
@@ -112,36 +119,39 @@ export class Weapon {
 
         if (!this.windfury && !this.proc2 && tempenchant && (tempenchant.ppm || tempenchant.chance)) {
             this.proc2 = {};
-            if (tempenchant.ppm) this.proc2.chance = ~~(this.speed * tempenchant.ppm / 0.006);
+            if (tempenchant.ppm) this.proc2.chance = ~~((this.speed * tempenchant.ppm) / 0.006);
             if (tempenchant.chance) this.proc2.chance = tempenchant.chance * 100;
             if (tempenchant.magicdmg) this.proc2.magicdmg = tempenchant.magicdmg;
         }
 
-        for(let buff of buffs)
-            if (buff.bonusdmg && buff.active)
-                this.basebonusdmg += buff.bonusdmg;
-        if (enchant && enchant.bonusdmg) 
-            this.basebonusdmg += enchant.bonusdmg;
-        if (!this.windfury && tempenchant && tempenchant.bonusdmg)
-            this.basebonusdmg += tempenchant.bonusdmg;
+        for (let buff of buffs) if (buff.bonusdmg && buff.active) this.basebonusdmg += buff.bonusdmg;
+        if (enchant && enchant.bonusdmg) this.basebonusdmg += enchant.bonusdmg;
+        if (!this.windfury && tempenchant && tempenchant.bonusdmg) this.basebonusdmg += tempenchant.bonusdmg;
         this.bonusdmg = this.basebonusdmg;
     }
     dmg(heroicstrike) {
         let dmg;
         let mod = 1;
-        dmg = rng(this.mindmg + this.bonusdmg, this.maxdmg + this.bonusdmg) + (this.player.stats.ap / 14) * this.speed + this.player.stats.moddmgdone;
+        dmg =
+            rng(this.mindmg + this.bonusdmg, this.maxdmg + this.bonusdmg) +
+            (this.player.stats.ap / 14) * this.speed +
+            this.player.stats.moddmgdone;
         if (heroicstrike) dmg += heroicstrike.bonus;
         if (heroicstrike && heroicstrike instanceof HeroicStrike && this.player.heroicbonus) mod = 1.25;
         return dmg * this.modifier * this.player.stats.dmgmod * mod + this.player.stats.moddmgtaken;
     }
     avgdmg() {
-        let dmg = ((this.mindmg + this.bonusdmg + this.maxdmg + this.bonusdmg)/2) + (this.player.stats.ap / 14) * this.normSpeed + this.player.stats.moddmgdone;
+        let dmg =
+            (this.mindmg + this.bonusdmg + this.maxdmg + this.bonusdmg) / 2 +
+            (this.player.stats.ap / 14) * this.normSpeed +
+            this.player.stats.moddmgdone;
         dmg = dmg * this.modifier * this.player.stats.dmgmod + this.player.stats.moddmgtaken;
         return dmg * (1 - this.player.armorReduction);
     }
     use() {
-        this.timer = Math.round(this.speed * 1000 / this.player.stats.haste);
-        if (!this.offhand && this.player.spells.slam && this.player.spells.slam.afterswing) this.player.spells.slam.mhthreshold = this.timer - 1000;
+        this.timer = Math.round((this.speed * 1000) / this.player.stats.haste);
+        if (!this.offhand && this.player.spells.slam && this.player.spells.slam.afterswing)
+            this.player.spells.slam.mhthreshold = this.timer - 1000;
     }
     step(next) {
         this.timer -= next;

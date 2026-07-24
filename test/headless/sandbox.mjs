@@ -24,31 +24,36 @@ export async function loadEngine({ sod = true, trace = null } = {}) {
     if (loaded) throw new Error('engine already loaded in this process');
     loaded = true;
     globalThis.console = {
-        log: (...args) => { if (trace) trace.push(String(args[0])); },
+        log: (...args) => {
+            if (trace) trace.push(String(args[0]));
+        },
         warn: () => {},
-        error: (...args) => { throw new Error('engine console.error: ' + args.join(' ')); },
+        error: (...args) => {
+            throw new Error('engine console.error: ' + args.join(' '));
+        },
     };
 
     const imp = (rel) => import(pathToFileURL(path.join(ROOT, rel)).href);
-    const [{ RNG }, { updateGlobals }, { Player }, { Simulation }, { installModeData }, { spells }] =
-        await Promise.all([
+    const [{ RNG }, { updateGlobals }, { Player }, { Simulation }, { installModeData }, { spells }] = await Promise.all(
+        [
             imp('js/rng.ts'),
             imp('js/globals.ts'),
             imp('js/classes/player.ts'),
             imp('js/classes/simulation.ts'),
             imp('js/data/mode.ts'),
             imp('js/data/spells.ts'),
-        ]);
+        ],
+    );
 
     let session;
     if (sod) {
         const [{ gear }, { runes }, sessionMod] = await Promise.all(
-            ['js/data/gear_sod.ts', 'js/data/runes.ts', 'js/data/session_sod.ts'].map(imp));
+            ['js/data/gear_sod.ts', 'js/data/runes.ts', 'js/data/session_sod.ts'].map(imp),
+        );
         session = sessionMod.session;
         installModeData({ mode: 'sod', gear, runes, session });
     } else {
-        const [{ gear }, sessionMod] = await Promise.all(
-            ['js/data/gear.ts', 'js/data/session.ts'].map(imp));
+        const [{ gear }, sessionMod] = await Promise.all(['js/data/gear.ts', 'js/data/session.ts'].map(imp));
         session = sessionMod.session;
         installModeData({ mode: 'classic', gear, session });
     }

@@ -1,8 +1,6 @@
 import { SIM } from './sim-ns.ts';
-import { spells } from './data/spells.ts';
 
 SIM.STATS = {
-
     init: function () {
         var view = this;
         view.variables();
@@ -52,7 +50,7 @@ SIM.STATS = {
         let colors = [];
         view.auradata = {
             labels: [],
-            datasets: []
+            datasets: [],
         };
         for (let name in sim.player.auras) {
             let aura = sim.player.auras[name];
@@ -74,7 +72,7 @@ SIM.STATS = {
         colors = [];
         view.dmgdata = {
             labels: [],
-            datasets: []
+            datasets: [],
         };
         for (let name in sim.player.spells) {
             let spell = sim.player.spells[name];
@@ -152,8 +150,6 @@ SIM.STATS = {
             colors.push(view.colors[counter % view.colors.length]);
         }
 
-
-
         view.dmgdata.datasets.push({
             data: data,
             fill: false,
@@ -163,10 +159,10 @@ SIM.STATS = {
         data = [];
         view.spreaddata = {
             labels: [],
-            datasets: []
+            datasets: [],
         };
 
-        for(let i in sim.spread) {
+        for (let i in sim.spread) {
             view.spreaddata.labels.push(i);
             data.push(sim.spread[i]);
         }
@@ -175,9 +171,8 @@ SIM.STATS = {
             data: data,
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             borderColor: 'rgb(255, 99, 132)',
-            fill: 'origin'
+            fill: 'origin',
         });
-
     },
 
     buildAuras: function () {
@@ -194,39 +189,43 @@ SIM.STATS = {
                 legend: {
                     display: false,
                     align: 'center',
-                    fullWidth: true
+                    fullWidth: true,
                 },
                 tooltips: {
                     enabled: false,
                 },
                 hover: {
-                    mode: null
+                    mode: null,
                 },
                 title: {
                     display: false,
                     text: 'Aura Uptime',
                     fontColor: '#ccc',
-                    position: 'bottom'
+                    position: 'bottom',
                 },
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            fontColor: '#ccc',
+                    yAxes: [
+                        {
+                            ticks: {
+                                fontColor: '#ccc',
+                            },
+                            gridLines: {
+                                display: false,
+                            },
                         },
-                        gridLines: {
-                            display: false
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            min: 0,
-                            display: false,
+                    ],
+                    xAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                                min: 0,
+                                display: false,
+                            },
+                            gridLines: {
+                                display: false,
+                            },
                         },
-                        gridLines: {
-                            display: false
-                        }
-                    }]
+                    ],
                 },
                 animation: {
                     onComplete: function () {
@@ -236,18 +235,21 @@ SIM.STATS = {
                             var meta = chartInstance.controller.getDatasetMeta(i);
                             meta.data.forEach(function (bar, index) {
                                 var data = dataset.data[index];
-                                ctx.fillStyle = "#ddd";
+                                ctx.fillStyle = '#ddd';
                                 ctx.shadowOffsetX = 2;
                                 ctx.shadowOffsetY = 2;
-                                ctx.shadowColor = "rgba(0,0,0,0.5)";
+                                ctx.shadowColor = 'rgba(0,0,0,0.5)';
                                 ctx.shadowBlur = 4;
-                                ctx.fillText(data + '%', parseInt(data) < 11 ? bar._model.x + 10 : bar._model.x - 50, bar._model.y + 5);
+                                ctx.fillText(
+                                    data + '%',
+                                    parseInt(data) < 11 ? bar._model.x + 10 : bar._model.x - 50,
+                                    bar._model.y + 5,
+                                );
                             });
                         });
-                    }
-                }
+                    },
+                },
             },
-
         });
     },
 
@@ -262,7 +264,7 @@ SIM.STATS = {
                 elements: {
                     arc: {
                         borderWidth: 1,
-                    }
+                    },
                 },
                 responsive: true,
                 maintainAspectRatio: false,
@@ -270,25 +272,25 @@ SIM.STATS = {
                     display: false,
                     text: 'DPS',
                     fontColor: '#ccc',
-                    position: 'bottom'
+                    position: 'bottom',
                 },
                 animation: {
                     animateScale: true,
-                    animateRotate: true
+                    animateRotate: true,
                 },
                 legend: {
                     display: false,
                     position: 'bottom',
                     labels: {
                         fontColor: '#ccc',
-                    }
+                    },
                 },
                 tooltips: {
                     callbacks: {
                         label: (item, obj) => ` ${obj.labels[item.index]}: ${obj.datasets[0].data[item.index]} DPS`,
-                    }
+                    },
                 },
-            }
+            },
         });
 
         view.dmglegend.html(view.dmgchart.generateLegend());
@@ -297,34 +299,41 @@ SIM.STATS = {
     buildTable: function (sim) {
         var view = this;
         view.table.empty();
-        let html = '<table><thead><tr><th>Action</th><th>Hit %</th><th>Crit %</th><th>Miss %</th><th>Dodge %</th><th>Glance %</th><th>Uses</th><th>DPR</th><th>DPS</th></tr></thead><tbody>';
-
+        let html =
+            '<table><thead><tr><th>Action</th><th>Hit %</th><th>Crit %</th><th>Miss %</th><th>Dodge %</th><th>Glance %</th><th>Uses</th><th>DPR</th><th>DPS</th></tr></thead><tbody>';
 
         let i = sim.iterations;
         let data = sim.player.mh.data;
         let total = data.reduce((a, b) => a + b, 0);
         let dps = (sim.player.mh.totaldmg / sim.totalduration).toFixed(2);
-        html += `<tr><td>Main Hand</td><td>${(data[0] / total * 100).toFixed(2)}</td><td>${(data[3] / total * 100).toFixed(2)}</td><td>${(data[1] / total * 100).toFixed(2)}</td><td>${(data[2] / total * 100).toFixed(2)}</td><td>${(data[4] / total * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td></td><td>${dps}</td></tr>`;
+        html += `<tr><td>Main Hand</td><td>${((data[0] / total) * 100).toFixed(2)}</td><td>${((data[3] / total) * 100).toFixed(2)}</td><td>${((data[1] / total) * 100).toFixed(2)}</td><td>${((data[2] / total) * 100).toFixed(2)}</td><td>${((data[4] / total) * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td></td><td>${dps}</td></tr>`;
 
         if (sim.player.oh) {
             data = sim.player.oh.data;
             total = data.reduce((a, b) => a + b, 0);
             dps = (sim.player.oh.totaldmg / sim.totalduration).toFixed(2);
-            html += `<tr><td>Off Hand</td><td>${(data[0] / total * 100).toFixed(2)}</td><td>${(data[3] / total * 100).toFixed(2)}</td><td>${(data[1] / total * 100).toFixed(2)}</td><td>${(data[2] / total * 100).toFixed(2)}</td><td>${(data[4] / total * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td></td><td>${dps}</td></tr>`;
+            html += `<tr><td>Off Hand</td><td>${((data[0] / total) * 100).toFixed(2)}</td><td>${((data[3] / total) * 100).toFixed(2)}</td><td>${((data[1] / total) * 100).toFixed(2)}</td><td>${((data[2] / total) * 100).toFixed(2)}</td><td>${((data[4] / total) * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td></td><td>${dps}</td></tr>`;
         }
-        
+
         for (let name in sim.player.spells) {
             let n = sim.player.spells[name].name;
             let data = sim.player.spells[name].data;
             let total = data.reduce((a, b) => a + b, 0);
             if (!total) continue;
             let dps = (sim.player.spells[name].totaldmg / sim.totalduration).toFixed(2);
-            let dpr: any = ((sim.player.spells[name].totaldmg / i) / (sim.player.spells[name].cost * (total / i))).toFixed(2);
-            if (name == "slam" && sim.player.bloodsurge)
-                dpr = Infinity;
-            if (name == "execute")
-                dpr = ((sim.player.spells[name].totaldmg / i) / ((sim.player.spells[name].cost * (total / i)) + (sim.player.spells[name].totalusedrage / i))).toFixed(2);
-            html += `<tr><td>${n}</td><td>${(data[0] / total * 100).toFixed(2)}</td><td>${(data[3] / total * 100).toFixed(2)}</td><td>${(data[1] / total * 100).toFixed(2)}</td><td>${(data[2] / total * 100).toFixed(2)}</td><td>${(data[4] / total * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td>${dpr}</td><td>${dps}</td></tr>`;
+            let dpr: any = (
+                sim.player.spells[name].totaldmg /
+                i /
+                (sim.player.spells[name].cost * (total / i))
+            ).toFixed(2);
+            if (name == 'slam' && sim.player.bloodsurge) dpr = Infinity;
+            if (name == 'execute')
+                dpr = (
+                    sim.player.spells[name].totaldmg /
+                    i /
+                    (sim.player.spells[name].cost * (total / i) + sim.player.spells[name].totalusedrage / i)
+                ).toFixed(2);
+            html += `<tr><td>${n}</td><td>${((data[0] / total) * 100).toFixed(2)}</td><td>${((data[3] / total) * 100).toFixed(2)}</td><td>${((data[1] / total) * 100).toFixed(2)}</td><td>${((data[2] / total) * 100).toFixed(2)}</td><td>${((data[4] / total) * 100).toFixed(2)}</td><td>${(total / i).toFixed(2)}</td><td>${dpr}</td><td>${dps}</td></tr>`;
         }
 
         if (sim.player.auras.rend) {
@@ -332,8 +341,8 @@ SIM.STATS = {
             let total = data.reduce((a, b) => a + b, 0);
             let totaldmg = sim.player.auras.rend.totaldmg;
             let dps = (totaldmg / sim.totalduration).toFixed(2);
-            let dpr = ((totaldmg / i) / (sim.player.auras.rend.cost * (total / i))).toFixed(2);
-            html += `<tr><td>${sim.player.auras.rend.name}</td><td></td><td></td><td>${(data[1] / total * 100).toFixed(2)}</td><td>${(data[2] / total * 100).toFixed(2)}</td><td></td><td>${(total / i).toFixed(2)}</td><td>${dpr}</td><td>${dps}</td></tr>`;
+            let dpr = (totaldmg / i / (sim.player.auras.rend.cost * (total / i))).toFixed(2);
+            html += `<tr><td>${sim.player.auras.rend.name}</td><td></td><td></td><td>${((data[1] / total) * 100).toFixed(2)}</td><td>${((data[2] / total) * 100).toFixed(2)}</td><td></td><td>${(total / i).toFixed(2)}</td><td>${dpr}</td><td>${dps}</td></tr>`;
         }
 
         html += '</tbody></table>';
@@ -360,32 +369,34 @@ SIM.STATS = {
                 },
                 elements: {
                     line: {
-                        tension: 0.4
+                        tension: 0.4,
                     },
-                    point:{
-                        radius: 0
-                    }
+                    point: {
+                        radius: 0,
+                    },
                 },
                 plugins: {
                     filler: {
-                        propagate: false
-                    }
+                        propagate: false,
+                    },
                 },
                 scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero:true,
-                            autoSkip: true,
-                            maxRotation: 0
-                        }
-                    }],
+                    xAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true,
+                                autoSkip: true,
+                                maxRotation: 0,
+                            },
+                        },
+                    ],
                 },
                 tooltips: {
                     callbacks: {
                         label: (item, obj) => ` ${obj.labels[item.index]} DPS: ${obj.datasets[0].data[item.index]}`,
-                    }
+                    },
                 },
-            }
+            },
         });
     },
 };
