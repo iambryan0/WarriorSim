@@ -4,6 +4,27 @@ Running log of the modernization (see `PROMPT.MD` for the plan). Newest first
 within each phase. Every entry: what changed, how it was verified, open
 questions.
 
+## Phase 3 — Rust/WASM engine
+
+### Crate scaffold + PRNG bit-parity (branch `phase3/rust-scaffold`)
+
+- `engine/` crate (zero dependencies on purpose — wasm-bindgen and JSON/arg
+  crates arrive with the modules that need them): `src/rng.rs` ports
+  mulberry32 on JS 32-bit semantics (`|0`/`>>>`/`Math.imul` are all plain
+  wrapping u32 ops; the final `/ 2^32` is exact in f64), plus the engine's
+  `rng(min,max)` / `rng10k()` truncation helpers.
+- The validation contract for the whole phase starts here:
+  `engine/tests/gen-golden.mjs` generates a golden sequence from the REAL
+  js/rng.ts (5 seeds x 64 draws, f64 bits as hex), and
+  `engine/tests/prng_parity.rs` asserts the Rust side reproduces it
+  bit-for-bit. Both pass; the CLI (`warriorsim prng --seed 42`) prints the
+  same 0.6011037519201636 first draw the mechanics tests pin.
+- Toolchain: rustup stable 1.97.1 (minimal profile + rustfmt/clippy), gcc
+  for linking. cargo fmt/clippy clean. `engine/target` gitignored; the
+  golden json is prettier-ignored (generated).
+- Next: port `weapon.ts` (module 1 of 4), then spell -> player ->
+  simulation, each gated on matched-seed validation against the JS engine.
+
 ## Phase 2 — Data layer + engine hardening
 
 ### Engine under strict: true (branch `phase2/engine-strict`)

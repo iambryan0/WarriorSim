@@ -1,0 +1,18 @@
+[package]
+name = "warriorsim-engine"
+version = "0.1.0"
+edition = "2021"
+description = "Rust port of the WarriorSim JS engine (PROMPT.MD Phase 3): bit-for-bit parity with the JS engine under matched seeds."
+
+# Zero-dependency core on purpose: the port must be validated against the JS
+# engine before anything else moves in. wasm-bindgen and CLI arg/JSON crates
+# arrive with the modules that need them.
+[dependencies]
+
+[[bin]]
+name = "warriorsim"
+path = "src/main.rs"
+
+[lib]
+name = "warriorsim_engine"
+path = "src/lib.rs"

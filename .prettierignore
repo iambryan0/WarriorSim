@@ -22,3 +22,4 @@ package-lock.json
 index.html
 classic.html
 .claude/
+engine/tests/prng-golden.json
