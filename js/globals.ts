@@ -8,7 +8,7 @@ export function getGlobalsDelta() {
     const _gear: any = {};
     for (const type in gear) {
         if (type == 'custom') continue;
-        _gear[type] = gear[type].map((item) => {
+        _gear[type] = gear[type].map((item: any) => {
             return {
                 id: item.id,
                 dps: item.dps,
@@ -19,7 +19,7 @@ export function getGlobalsDelta() {
     }
     const _enchant: any = {};
     for (const type in enchant) {
-        _enchant[type] = enchant[type].map((item) => {
+        _enchant[type] = enchant[type].map((item: any) => {
             return {
                 id: item.id,
                 dps: item.dps,
@@ -31,7 +31,7 @@ export function getGlobalsDelta() {
     const _runes: any = {};
     if (typeof runes !== 'undefined') {
         for (const type in runes) {
-            _runes[type] = runes[type].map((item) => {
+            _runes[type] = runes[type].map((item: any) => {
                 return {
                     id: item.id,
                     selected: item.selected,
@@ -43,7 +43,7 @@ export function getGlobalsDelta() {
     return {
         talents: talents.map((tree) => {
             return {
-                t: tree.t.map((talent) => talent.c),
+                t: tree.t.map((talent: any) => talent.c),
             };
         }),
         buffs: buffs.filter((buff) => buff.active).map((buff) => buff.id),
@@ -55,9 +55,9 @@ export function getGlobalsDelta() {
     };
 }
 
-export function updateGlobals(params) {
+export function updateGlobals(params: any) {
     for (let tree in params.talents)
-        for (let talent in params.talents[tree].t) talents[tree].t[talent].c = params.talents[tree].t[talent];
+        for (let talent in params.talents[tree].t) (talents as any)[tree].t[talent].c = params.talents[tree].t[talent];
 
     for (let j of buffs) j.active = false;
     for (let i of params.buffs) for (let j of buffs) if (i == j.id) j.active = true;

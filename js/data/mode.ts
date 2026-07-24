@@ -9,7 +9,7 @@ export let gear: any;
 export let runes: any;
 export let session: any;
 
-export function installModeData(tables) {
+export function installModeData(tables: any) {
     mode = tables.mode;
     gear = tables.gear;
     runes = tables.runes;

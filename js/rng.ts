@@ -5,7 +5,7 @@
 // that a given seed produces an identical event sequence.
 export const RNG = {
     random: Math.random,
-    seed(seed) {
+    seed(seed: number) {
         let a = seed >>> 0;
         this.random = function () {
             a |= 0;

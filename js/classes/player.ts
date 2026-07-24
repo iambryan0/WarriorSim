@@ -1,4 +1,6 @@
 import { RNG } from '../rng.ts';
+import type { PlayerConfig, ProcDef } from '../engine-types.ts';
+import type { Spell } from './spell.ts';
 import { rng, rng10k, step, RESULT, DEFENSETYPE, SCHOOL } from './simulation.ts';
 import { Weapon, WEAPONTYPE } from './weapon.ts';
 import {
@@ -54,7 +56,7 @@ import { talents } from '../data/talents.ts';
 
 export class Player {
     [key: string]: any;
-    static getConfig(base?) {
+    static getConfig(base?: any) {
         return {
             level: $('input[name="level"]').val(),
             race: $('select[name="race"]').val(),
@@ -78,7 +80,7 @@ export class Player {
             },
         };
     }
-    constructor(testItem?, testType?, enchtype?, config?) {
+    constructor(testItem?: any, testType?: any, enchtype?: any, config?: PlayerConfig) {
         if (!config) config = Player.getConfig();
         this.rage = 0;
         this.ragemod = 1;
@@ -304,7 +306,7 @@ export class Player {
                         }
                     }
                     if (item.skill && item.skill > 0) {
-                        let sk = WEAPONTYPE[item.type.replace(' ', '').toUpperCase()];
+                        let sk = WEAPONTYPE[item.type.replace(' ', '').toUpperCase() as keyof typeof WEAPONTYPE];
                         this.base['skill_' + sk] += item.skill;
                     }
                     if (item.skills) {
@@ -365,7 +367,7 @@ export class Player {
             }
         }
     }
-    addWeapon(item, type) {
+    addWeapon(item: any, type: any) {
         let ench, tempench;
         for (let item of enchant[type]) {
             if (item.temp) continue;
@@ -682,7 +684,7 @@ export class Player {
             this.dodgetimeworn = 0;
         }
     }
-    addSpells(testItem) {
+    addSpells(testItem: any) {
         this.preporder = [];
         for (let spell of spells) {
             if (
@@ -710,7 +712,7 @@ export class Player {
             }
         }
         // sort by timetoend to prepare for usestep calculations
-        this.preporder.sort((a, b) => {
+        this.preporder.sort((a: any, b: any) => {
             return a.timetoend - b.timetoend;
         });
     }
@@ -737,7 +739,7 @@ export class Player {
         this.base.skill_1 += this.mh.twohand ? this.base.skill_21 : this.base.skill_11;
         this.base.skill_3 += this.mh.twohand ? this.base.skill_23 : this.base.skill_13;
     }
-    reset(rage) {
+    reset(rage: any) {
         this.rage = rage;
         this.timer = 0;
         this.itemtimer = 0;
@@ -841,7 +843,7 @@ export class Player {
             this.stats.ap += ~~((this.base.aprace + this.stats.str * 2) * (this.stats.baseapmod - 1));
         this.stats.ap = ~~(this.stats.ap * this.stats.apmod);
     }
-    getAgiPerCrit(level) {
+    getAgiPerCrit(level: any) {
         let table = [
             0.25, 0.2381, 0.2381, 0.2273, 0.2174, 0.2083, 0.2083, 0.2, 0.1923, 0.1923, 0.1852, 0.1786, 0.1667, 0.1613,
             0.1563, 0.1515, 0.1471, 0.1389, 0.1351, 0.1282, 0.1282, 0.125, 0.119, 0.1163, 0.1111, 0.1087, 0.1064, 0.102,
@@ -1037,22 +1039,22 @@ export class Player {
             this.stats.dmgmod *= 1.1;
         }
     }
-    getGlanceReduction(weapon) {
+    getGlanceReduction(weapon: Weapon) {
         let diff = this.target.defense - this.stats['skill_' + weapon.type];
         let low = Math.max(Math.min(1.3 - 0.05 * diff, 0.91), 0.01);
         let high = Math.max(Math.min(1.2 - 0.03 * diff, 0.99), 0.2);
         return RNG.random() * (high - low) + low;
     }
-    getGlanceChance(weapon) {
+    getGlanceChance(weapon: Weapon) {
         return 10 + Math.max(this.target.defense - Math.min(this.level * 5, this.stats['skill_' + weapon.type]), 0) * 2;
     }
-    getMissChance(weapon) {
+    getMissChance(weapon: Weapon) {
         let diff = this.target.defense - this.stats['skill_' + weapon.type];
         let miss = 5 + (diff > 10 ? diff * 0.2 : diff * 0.1);
         miss -= diff > 10 ? this.stats.hit - 1 : this.stats.hit;
         return miss;
     }
-    getDWMissChance(weapon) {
+    getDWMissChance(weapon: Weapon) {
         let diff = this.target.defense - this.stats['skill_' + weapon.type];
         let miss = 5 + (diff > 10 ? diff * 0.2 : diff * 0.1);
         miss = miss * 0.8 + 20;
@@ -1064,7 +1066,7 @@ export class Player {
         if (this.target.level - this.level >= 3) crit -= 1.8;
         return Math.max(crit, 0);
     }
-    getDodgeChance(weapon) {
+    getDodgeChance(weapon: Weapon) {
         return Math.max(
             5 -
                 this.stats.expertise -
@@ -1079,7 +1081,7 @@ export class Player {
         let r = this.target.armor / (this.target.armor + 400 + 85 * this.level);
         return r > 0.75 ? 0.75 : r;
     }
-    addRage(dmg, result, weapon, spell) {
+    addRage(dmg: number, result: number, weapon: Weapon, spell: Spell | null) {
         let oldRage = this.rage;
         if (!spell || spell instanceof HeroicStrike || spell instanceof Cleave) {
             if (
@@ -1111,7 +1113,7 @@ export class Player {
 
         if (this.auras.consumedrage && oldRage < 60 && this.rage >= 60) this.auras.consumedrage.use();
     }
-    steptimer(a) {
+    steptimer(a: any) {
         if (this.timer <= a) {
             this.timer = 0;
             /* start-log */ if (this.logging) this.log('Global CD off'); /* end-log */
@@ -1121,7 +1123,7 @@ export class Player {
             return false;
         }
     }
-    stepitemtimer(a) {
+    stepitemtimer(a: any) {
         if (this.itemtimer <= a) {
             this.itemtimer = 0;
             /* start-log */ if (this.logging) this.log('Item CD off'); /* end-log */
@@ -1131,7 +1133,7 @@ export class Player {
             return false;
         }
     }
-    stepstancetimer(a) {
+    stepstancetimer(a: any) {
         if (this.stancetimer <= a) {
             this.stancetimer = 0;
             /* start-log */ if (this.logging) this.log('Stance CD off'); /* end-log */
@@ -1141,7 +1143,7 @@ export class Player {
             return false;
         }
     }
-    stepragetimer(a) {
+    stepragetimer(a: any) {
         if (this.ragetimer <= a) {
             this.ragetimer = 0;
             this.rage += 10;
@@ -1152,14 +1154,14 @@ export class Player {
             return false;
         }
     }
-    stepdodgetimer(a) {
+    stepdodgetimer(a: any) {
         if (this.dodgetimer <= a) {
             this.dodgetimer = 0;
         } else {
             this.dodgetimer -= a;
         }
     }
-    stepauras(nobleeds?) {
+    stepauras(nobleeds?: boolean) {
         if (this.mh.proc1 && this.mh.proc1.spell && this.mh.proc1.spell.timer) this.mh.proc1.spell.step();
         if (this.mh.proc2 && this.mh.proc2.spell && this.mh.proc2.spell.timer) this.mh.proc2.spell.step();
         if (this.oh && this.oh.proc1 && this.oh.proc1.spell && this.oh.proc1.spell.timer) this.oh.proc1.spell.step();
@@ -1347,7 +1349,7 @@ export class Player {
         if (this.auras.weaponbleedmh && this.auras.weaponbleedmh.timer) this.auras.weaponbleedmh.end();
         if (this.auras.weaponbleedoh && this.auras.weaponbleedoh.timer) this.auras.weaponbleedoh.end();
     }
-    rollweapon(weapon) {
+    rollweapon(weapon: Weapon) {
         let tmp = 0;
         let roll = rng10k();
         tmp += Math.max(this.nextswinghs ? weapon.miss : weapon.dwmiss, 0) * 100;
@@ -1360,7 +1362,7 @@ export class Player {
         if (roll < tmp) return RESULT.CRIT;
         return RESULT.HIT;
     }
-    rollmeleespell(spell, weapon?) {
+    rollmeleespell(spell: Spell, weapon?: Weapon) {
         if (!weapon) weapon = this.mh;
         let tmp = 0;
         let roll = rng10k();
@@ -1380,7 +1382,7 @@ export class Player {
         if (roll < tmp && !spell.nocrit) return RESULT.CRIT;
         return RESULT.HIT;
     }
-    rollmagicspell(spell) {
+    rollmagicspell(spell: Spell | null) {
         let miss = this.target.misschance;
         if (spell.binaryspell) miss = this.target.binaryresist;
 
@@ -1388,7 +1390,7 @@ export class Player {
         if (rng10k() < this.stats.spellcrit * 100) return RESULT.CRIT;
         return RESULT.HIT;
     }
-    attackmh(weapon, adjacent, damageSoFar) {
+    attackmh(weapon: Weapon, adjacent: any, damageSoFar: any) {
         this.stepauras();
 
         let spell = null;
@@ -1451,7 +1453,7 @@ export class Player {
         }
         return done + procdmg;
     }
-    attackoh(weapon) {
+    attackoh(weapon: Weapon) {
         this.stepauras();
 
         let procdmg = 0;
@@ -1484,7 +1486,7 @@ export class Player {
             ); /* end-log */
         return done + procdmg;
     }
-    cast(spell, delayedheroic, adjacent, damageSoFar) {
+    cast(spell: Spell, delayedheroic: any, adjacent: any, damageSoFar: any) {
         if (!adjacent) {
             this.stepauras();
             spell.use(delayedheroic);
@@ -1532,7 +1534,7 @@ export class Player {
             ); /* end-log */
         return done + procdmg;
     }
-    castoh(spell, adjacent, damageSoFar) {
+    castoh(spell: Spell, adjacent: any, damageSoFar: any) {
         let dmg = spell.dmg(this.oh) * this.oh.modifier;
         if (dmg) dmg += this.stats.moddmgtaken;
         let result = this.rollmeleespell(spell, this.oh);
@@ -1559,7 +1561,7 @@ export class Player {
             ); /* end-log */
         return done + procdmg;
     }
-    dealdamage(dmg, result, weapon?, spell?, adjacent?) {
+    dealdamage(dmg: number, result: number, weapon?: Weapon, spell?: Spell | null, adjacent?: any) {
         if (result != RESULT.MISS && result != RESULT.DODGE) {
             if (spell == null || spell.school == SCHOOL.PHYSICAL) dmg *= 1 - this.armorReduction;
             if (!adjacent) this.addRage(dmg, result, weapon, spell);
@@ -1569,7 +1571,7 @@ export class Player {
             return 0;
         }
     }
-    proccrit(offhand, adjacent?, spell?) {
+    proccrit(offhand: boolean, adjacent?: any, spell?: Spell) {
         this.crittimer = 1;
         if (this.auras.flurry) this.auras.flurry.use();
         if (this.auras.deepwounds) {
@@ -1580,7 +1582,7 @@ export class Player {
         if (this.overpowerrend && this.auras.rend && this.auras.rend.timer && spell instanceof Overpower)
             this.auras.rend.refresh();
     }
-    procattack(spell, weapon, result, adjacent?, damageSoFar?) {
+    procattack(spell: Spell | null, weapon: Weapon, result: number, adjacent?: any, damageSoFar?: number) {
         let procdmg = 0;
         let extras = 0;
         let batchedextras = 0;
@@ -1793,7 +1795,7 @@ export class Player {
         if (!spell && this.mh.windfury && this.mh.windfury.stacks) this.mh.windfury.proc();
         return procdmg;
     }
-    phantomproc(weapon) {
+    phantomproc(weapon: Weapon) {
         let dmg = 0;
         if (rng10k() < weapon.proc1.chance) {
             dmg += this.physproc(weapon.proc1.physdmg);
@@ -1806,7 +1808,7 @@ export class Player {
         }
         return dmg;
     }
-    magicproc(proc) {
+    magicproc(proc: ProcDef) {
         let mod = 1;
         let miss = this.target.misschance;
         let dmg = proc.magicdmg;
@@ -1817,7 +1819,7 @@ export class Player {
         if (proc.coeff) dmg += this.spelldamage * proc.coeff;
         return dmg * mod * this.stats.spelldmgmod;
     }
-    physproc(dmg) {
+    physproc(dmg: any) {
         let tmp = 0;
         let roll = rng10k();
         tmp += Math.max(this.mh.miss, 0) * 100;
@@ -1839,7 +1841,7 @@ export class Player {
             oh: this.oh,
         };
     }
-    log(msg) {
+    log(msg: any) {
         let color = 'GoldenRod';
         if (msg.indexOf('attack') > 1 || msg.indexOf('Global') > -1) color = 'Gray';
         else if (msg.indexOf('tick') > 1) color = 'Tomato';
@@ -1850,7 +1852,7 @@ export class Player {
             `color: ${color}`,
         );
     }
-    switch(stance) {
+    switch(stance: any) {
         let prev = this.stance;
         this.stance = stance;
         this.auras.battlestance.timer = 0;
@@ -1872,7 +1874,7 @@ export class Player {
         this.updateAuras();
         /* start-log */ if (this.logging) this.log(`Switched to ${stance} stance`); /* end-log */
     }
-    isValidStance(stance, isRend) {
+    isValidStance(stance: any, isRend: any) {
         return (
             this.stance == stance ||
             (this.stance == 'glad' && this.shield) ||

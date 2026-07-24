@@ -1,4 +1,5 @@
 import { rng } from './simulation.ts';
+import type { Player } from './player.ts';
 import { createSpell, Crusader, HeroicStrike, WeaponBleed, Windfury } from './spell.ts';
 import { buffs } from '../data/buffs.ts';
 
@@ -21,7 +22,7 @@ export const WEAPONTYPE = {
 
 export class Weapon {
     [key: string]: any;
-    constructor(player, item, enchant?, tempenchant?, offhand?, twohand?) {
+    constructor(player: Player, item: any, enchant?: any, tempenchant?: any, offhand?: boolean, twohand?: boolean) {
         this.player = player;
         this.id = item.id;
         this.name = item.name;
@@ -42,7 +43,7 @@ export class Weapon {
         this.crit = 0;
         this.basebonusdmg = 0;
         this.bonusdmg = 0;
-        this.type = WEAPONTYPE[item.type.replace(' ', '').toUpperCase()] || 0;
+        this.type = WEAPONTYPE[item.type.replace(' ', '').toUpperCase() as keyof typeof WEAPONTYPE] || 0;
         this.totaldmg = 0;
         this.totalprocdmg = 0;
         this.data = [0, 0, 0, 0, 0];
@@ -129,7 +130,7 @@ export class Weapon {
         if (!this.windfury && tempenchant && tempenchant.bonusdmg) this.basebonusdmg += tempenchant.bonusdmg;
         this.bonusdmg = this.basebonusdmg;
     }
-    dmg(heroicstrike) {
+    dmg(heroicstrike?: any) {
         let dmg;
         let mod = 1;
         dmg =
@@ -153,7 +154,7 @@ export class Weapon {
         if (!this.offhand && this.player.spells.slam && this.player.spells.slam.afterswing)
             this.player.spells.slam.mhthreshold = this.timer - 1000;
     }
-    step(next) {
+    step(next: any) {
         this.timer -= next;
     }
 }
