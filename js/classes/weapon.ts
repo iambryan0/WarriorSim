@@ -1,8 +1,8 @@
-import { rng } from './simulation.js';
-import { createSpell, Crusader, HeroicStrike, WeaponBleed, Windfury } from './spell.js';
-import { enchant } from '../data/enchants.js';
-import { buffs } from '../data/buffs.js';
-import { spells } from '../data/spells.js';
+import { rng } from './simulation.ts';
+import { createSpell, Crusader, HeroicStrike, WeaponBleed, Windfury } from './spell.ts';
+import { enchant } from '../data/enchants.ts';
+import { buffs } from '../data/buffs.ts';
+import { spells } from '../data/spells.ts';
 
 export const WEAPONTYPE = {
     MACE: 0,
@@ -24,7 +24,8 @@ export const WEAPONTYPE = {
 }
 
 export class Weapon {
-    constructor(player, item, enchant, tempenchant, offhand, twohand) {
+    [key: string]: any;
+    constructor(player, item, enchant?, tempenchant?, offhand?, twohand?) {
         this.player = player;
         this.id = item.id;
         this.name = item.name;

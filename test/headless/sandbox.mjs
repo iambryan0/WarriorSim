@@ -1,6 +1,6 @@
 // Loads the (fully ES-module) engine by importing it natively, the same
 // modules the pages and the worker use. Randomness is made deterministic
-// through the engine's own injection point: RNG.seed() (js/rng.js), which
+// through the engine's own injection point: RNG.seed() (js/rng.ts), which
 // swaps RNG.random from its Math.random default to seeded mulberry32.
 //
 // One engine per process — module state (data tables, mode installation) is
@@ -32,23 +32,23 @@ export async function loadEngine({ sod = true, trace = null } = {}) {
     const imp = (rel) => import(pathToFileURL(path.join(ROOT, rel)).href);
     const [{ RNG }, { updateGlobals }, { Player }, { Simulation }, { installModeData }, { spells }] =
         await Promise.all([
-            imp('js/rng.js'),
-            imp('js/globals.js'),
-            imp('js/classes/player.js'),
-            imp('js/classes/simulation.js'),
-            imp('js/data/mode.js'),
-            imp('js/data/spells.js'),
+            imp('js/rng.ts'),
+            imp('js/globals.ts'),
+            imp('js/classes/player.ts'),
+            imp('js/classes/simulation.ts'),
+            imp('js/data/mode.ts'),
+            imp('js/data/spells.ts'),
         ]);
 
     let session;
     if (sod) {
         const [{ gear }, { runes }, sessionMod] = await Promise.all(
-            ['js/data/gear_sod.js', 'js/data/runes.js', 'js/data/session_sod.js'].map(imp));
+            ['js/data/gear_sod.ts', 'js/data/runes.ts', 'js/data/session_sod.ts'].map(imp));
         session = sessionMod.session;
         installModeData({ mode: 'sod', gear, runes, session });
     } else {
         const [{ gear }, sessionMod] = await Promise.all(
-            ['js/data/gear.js', 'js/data/session.js'].map(imp));
+            ['js/data/gear.ts', 'js/data/session.ts'].map(imp));
         session = sessionMod.session;
         installModeData({ mode: 'classic', gear, session });
     }

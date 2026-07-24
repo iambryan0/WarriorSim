@@ -1,10 +1,10 @@
-// Generates test/fixtures/*.json from the shipped presets in js/data/presets.js.
+// Generates test/fixtures/*.json from the shipped presets in js/data/presets.ts.
 //
 // A fixture is exactly the worker's input: a `globals` object consumed by
 // updateGlobals(), plus playerConfig/simConfig objects mirroring what
 // Player.getConfig()/Simulation.getConfig() read from the DOM. The preset ->
-// storage merge below replicates SIM.PROFILES.importProfile (js/profiles.js)
-// on top of the `session` defaults (js/data/session_sod.js); the globals shape
+// storage merge below replicates SIM.PROFILES.importProfile (js/profiles.ts)
+// on top of the `session` defaults (js/data/session_sod.ts); the globals shape
 // matches what SIM.UI.loadSession() passes to updateGlobals(). updateGlobals
 // first clears every selected flag, so this storage-shaped delta selects the
 // same items as the browser's full getGlobalsDelta() payload.
@@ -16,7 +16,7 @@ const engine = await loadEngine({ sod: true });
 const session = structuredClone(engine.session);
 const spellsData = structuredClone(engine.spells);
 
-const presetsSrc = fs.readFileSync(path.join(ROOT, 'js/data/presets.js'), 'utf8');
+const presetsSrc = fs.readFileSync(path.join(ROOT, 'js/data/presets.ts'), 'utf8');
 const presets = {};
 for (const [, name, b64] of presetsSrc.matchAll(/^export const preset_(\w+) = '([^']+)';/gm)) {
     presets[name] = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));

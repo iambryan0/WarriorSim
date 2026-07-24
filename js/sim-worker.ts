@@ -2,11 +2,11 @@
 // Spawned by SimulationWorker (js/classes/simulation.js) with
 // { type: 'module' }. The mode-specific gear tables are loaded on demand from
 // the first message, mirroring the old conditional importScripts.
-import { RNG } from './rng.js';
-import { Player } from './classes/player.js';
-import { Simulation, TYPE } from './classes/simulation.js';
-import { updateGlobals } from './globals.js';
-import { installModeData } from './data/mode.js';
+import { RNG } from './rng.ts';
+import { Player } from './classes/player.ts';
+import { Simulation, TYPE } from './classes/simulation.ts';
+import { updateGlobals } from './globals.ts';
+import { installModeData } from './data/mode.ts';
 
 onmessage = async (event) => {
     const params = event.data;
@@ -16,12 +16,12 @@ onmessage = async (event) => {
     if (params.seed !== undefined) RNG.seed(params.seed);
     if (params.globals.sod) {
         const [{ gear }, { runes }] = await Promise.all([
-            import('./data/gear_sod.js'),
-            import('./data/runes.js'),
+            import('./data/gear_sod.ts'),
+            import('./data/runes.ts'),
         ]);
         installModeData({ gear, runes });
     } else {
-        const { gear } = await import('./data/gear.js');
+        const { gear } = await import('./data/gear.ts');
         installModeData({ gear });
     }
     updateGlobals(params.globals);

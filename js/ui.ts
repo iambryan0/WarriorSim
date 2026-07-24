@@ -1,15 +1,16 @@
-import { SIM } from './sim-ns.js';
-import { Player } from './classes/player.js';
-import { Simulation, SimulationWorker, SimulationWorkerParallel } from './classes/simulation.js';
-import { updateGlobals } from './globals.js';
-import { mode, gear, runes, session } from './data/mode.js';
-import { enchant, sets } from './data/enchants.js';
-import { buffs } from './data/buffs.js';
-import { spells } from './data/spells.js';
-import { talents } from './data/talents.js';
+import { SIM } from './sim-ns.ts';
+let player: any = null;
+import { Player } from './classes/player.ts';
+import { Simulation, SimulationWorker, SimulationWorkerParallel } from './classes/simulation.ts';
+import { updateGlobals } from './globals.ts';
+import { mode, gear, runes, session } from './data/mode.ts';
+import { enchant, sets } from './data/enchants.ts';
+import { buffs } from './data/buffs.ts';
+import { spells } from './data/spells.ts';
+import { talents } from './data/talents.ts';
 
 const MAX_WORKERS = ~~Math.min(8, (navigator.hardwareConcurrency || 8) / 2);
-const WEB_DB_URL = "https://classic.wowhead.com/";
+export const WEB_DB_URL = "https://classic.wowhead.com/";
 
 SIM.UI = {
 
@@ -400,7 +401,7 @@ SIM.UI = {
             },
             (iteration, report) => {
                 // Update
-                let perc = parseInt(iteration / report.iterations * 100);
+                let perc = parseInt((iteration / report.iterations * 100) as any);
                 dps.text((report.totaldmg / report.totalduration).toFixed(2));
                 btn.css('background', 'linear-gradient(to right, transparent ' + perc + '%, #444 ' + perc + '%)');
             },
@@ -420,7 +421,7 @@ SIM.UI = {
         view.sidebar.find('#weights-div > div').addClass('loading').append('<span class="spinner"><span class="bounce1"></span><span class="bounce2"></span><span class="bounce3"></span></span>');
         let tasksDone = 0;
         function updateFn(progress) {
-            const perc = parseInt(100 * (tasksDone + progress) / totalTasks);
+            const perc = parseInt((100 * (tasksDone + progress) / totalTasks) as any);
             btn.css('background', 'linear-gradient(to right, transparent ' + perc + '%, #444 ' + perc + '%)');
         }
         const simulateWeight = (stat, amount) => this.simulateStat(stat, amount, updateFn).then(result => {
@@ -486,7 +487,7 @@ SIM.UI = {
         var btn = view.sidebar.find('.js-table');
 
         const simulations = rows.map((row) => {
-            const simulation = { perc: 0 };
+            const simulation: any = { perc: 0 };
             simulation.run = () => {
                 // Remove from pending simulations
                 pending.delete(simulation);
@@ -499,7 +500,7 @@ SIM.UI = {
                     // Update total percentage
                     const total = Math.floor(
                         Array.from(simulations.values())
-                            .map((sim) => sim.perc)
+                            .map((sim: any) => sim.perc)
                             .reduce((a, b) => a + b, 0) / rows.length
                     );
                     if (total == 100) {
@@ -882,7 +883,7 @@ SIM.UI = {
     updateSession: function (i) {
         var view = this;
 
-        let obj = {};
+        let obj: any = {};
         obj.level = view.fight.find('input[name="level"]').val();
         obj.race = view.fight.find('select[name="race"]').val();
         obj.simulations = view.fight.find('input[name="simulations"]').val();
@@ -1215,8 +1216,8 @@ SIM.UI = {
             sortList: editmode ?  [[dpsrow, 1],[2, 0]] : [[dpsrow-1, 1],[1, 0]],
             textSorter : {
                 15 : function(a, b, direction, column, table) {
-                    var a = parseFloat(a.substring(0,a.indexOf('.') + 3));
-                    var b = parseFloat(b.substring(0,b.indexOf('.') + 3));
+                    a = parseFloat(a.substring(0,a.indexOf('.') + 3));
+                    b = parseFloat(b.substring(0,b.indexOf('.') + 3));
                     if (isNaN(a)) a = 0;
                     if (isNaN(b)) b = 0;
                     return (a < b) ? -1 : (a > b) ? 1 : 0;
@@ -1375,8 +1376,8 @@ SIM.UI = {
             sortList: editmode ? [[dpsrow, 1],[2, 0]] : [[dpsrow-1, 1],[1, 0]],
             textSorter : {
                 12 : function(a, b, direction, column, table) {
-                    var a = parseFloat(a.substring(0,a.indexOf('.') + 3));
-                    var b = parseFloat(b.substring(0,b.indexOf('.') + 3));
+                    a = parseFloat(a.substring(0,a.indexOf('.') + 3));
+                    b = parseFloat(b.substring(0,b.indexOf('.') + 3));
                     if (isNaN(a)) a = 0;
                     if (isNaN(b)) b = 0;
                     return (a < b) ? -1 : (a > b) ? 1 : 0;

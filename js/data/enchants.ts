@@ -1,4 +1,4 @@
-export const enchant = {
+export const enchant: any = {
    "mainhand": [
      {
        "id": 211845,
@@ -964,7 +964,7 @@ export const enchant = {
      }
    ]
  };
-export const sets = [
+export const sets: any[] = [
    {
       id: 143,
       name: 'Devilsaur Armor',

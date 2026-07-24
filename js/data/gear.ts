@@ -1,4 +1,4 @@
-export const gear = {
+export const gear: any = {
   "head": [
     {
       "name": "Dark Iron Helm",

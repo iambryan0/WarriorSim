@@ -1,5 +1,5 @@
 // race,class,level,str,agi,sta,inte,spi
-export const levelstats = [
+export const levelstats: any[] = [
     "1,1,1,23,20,22,20,21",
     "1,1,2,24,21,23,20,21",
     "1,1,3,25,21,24,20,22",

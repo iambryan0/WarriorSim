@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        // Deliberately permissive for the rename phase (PROMPT.MD Phase 1
+        // step 3): the codebase must compile and pass parity before real
+        // typing begins. Tightening happens per-directory afterwards.
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "strict": false,
+        "noImplicitAny": false,
+        "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
+        "skipLibCheck": true
+    },
+    "include": ["js/**/*.ts"]
+}

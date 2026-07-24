@@ -1,10 +1,11 @@
-import { batching, step, rng, rng10k, RESULT, DEFENSETYPE, SCHOOL } from './simulation.js';
-import { buffs } from '../data/buffs.js';
-import { enchant } from '../data/enchants.js';
-import { spells } from '../data/spells.js';
+import { batching, step, rng, rng10k, RESULT, DEFENSETYPE, SCHOOL } from './simulation.ts';
+import { buffs } from '../data/buffs.ts';
+import { enchant } from '../data/enchants.ts';
+import { spells } from '../data/spells.ts';
 
 export class Spell {
-    constructor(player, id, name) {
+    [key: string]: any;
+    constructor(player, id?, name?) {
         this.id = id;
         this.timer = 0;
         this.cost = 0;
@@ -62,10 +63,10 @@ export class Spell {
         if (spell.secondarystance) this.secondarystance = spell.secondarystance;
         
     }
-    dmg() {
+    dmg(...args: any[]) {
         return 0;
     }
-    use() {
+    use(...args: any[]) {
         this.player.timer = 1500;
         this.player.rage -= this.cost;
         this.timer = this.cooldown * 1000;
@@ -88,7 +89,7 @@ export class Spell {
 }
 
 export class Bloodthirst extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 30 - player.ragecostbonus;
         this.cooldown = 6;
@@ -105,7 +106,7 @@ export class Bloodthirst extends Spell {
 }
 
 export class Whirlwind extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 25 - player.ragecostbonus - (player.whirlwindcost || 0);
         this.cooldown = 10;
@@ -142,7 +143,7 @@ export class Whirlwind extends Spell {
 }
 
 export class Overpower extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 5 - player.ragecostbonus;
         this.cooldown = 5;
@@ -180,7 +181,7 @@ export class Overpower extends Spell {
 }
 
 export class Execute extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 15 - player.talents.executecost - player.ragecostbonus;
         this.usedrage = 0;
@@ -240,7 +241,7 @@ export class Execute extends Spell {
 }
 
 export class Bloodrage extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 0;
         this.rage = 10 + player.talents.bloodragebonus;
@@ -269,7 +270,7 @@ export class Bloodrage extends Spell {
 }
 
 export class HeroicStrike extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, "Heroic Strike");
         this.cost = 15 - player.talents.impheroicstrike - player.ragecostbonus;
         this.bonus = this.value1;
@@ -292,7 +293,7 @@ export class HeroicStrike extends Spell {
 }
 
 export class Cleave extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 20 - player.ragecostbonus;
         this.bonus = this.value1 * (1 + this.player.talents.cleavebonus / 100);
@@ -326,7 +327,7 @@ export class Cleave extends Spell {
 }
 
 export class MortalStrike extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Mortal Strike');
         this.cost = 30 - player.ragecostbonus;
         this.cooldown = 6;
@@ -343,7 +344,7 @@ export class MortalStrike extends Spell {
 }
 
 export class SunderArmor extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Sunder Armor');
         this.cost = 15 - player.talents.impsunderarmor - player.ragecostbonus;
         this.stacks = 0;
@@ -375,7 +376,7 @@ export class SunderArmor extends Spell {
 }
 
 export class Hamstring extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 10 - player.ragecostbonus;
         if (player.items.includes(19577))
@@ -409,7 +410,7 @@ export class Hamstring extends Spell {
 }
 
 export class ThunderClap extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.defenseType = DEFENSETYPE.MAGIC
         this.cost = 20 - player.ragecostbonus - player.talents.impthunderclap;
@@ -436,7 +437,7 @@ export class ThunderClap extends Spell {
 }
 
 export class VictoryRush extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Victory Rush');
         this.cost = 0;
         this.stacks = 0;
@@ -459,7 +460,7 @@ export class VictoryRush extends Spell {
 }
 
 export class RagingBlow extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Raging Blow');
         this.cost = 0;
         this.cooldown = 8;
@@ -482,7 +483,7 @@ export class RagingBlow extends Spell {
 }
 
 export class BerserkerRage extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 0;
         this.rage = player.talents.berserkerbonus;
@@ -508,7 +509,7 @@ export class BerserkerRage extends Spell {
 }
 
 export class QuickStrike extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Quick Strike');
         this.cost = 20 - player.talents.impheroicstrike - player.ragecostbonus;
         this.cooldown = 0;
@@ -529,7 +530,7 @@ export class QuickStrike extends Spell {
 }
 
 export class RagePotion extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Rage Potion');
         this.cost = 0;
         this.minrage = 80;
@@ -556,7 +557,7 @@ export class RagePotion extends Spell {
 }
 
 export class Slam extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 15 - player.ragecostbonus;
         this.casttime = player.precisetiming ? 0 : (1500 - (player.talents.impslam * 100));
@@ -594,7 +595,7 @@ export class Slam extends Spell {
 }
 
 export class Fireball extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.useonly = true;
         this.proc = { magicdmg: 331+40 };
@@ -618,7 +619,7 @@ export class Fireball extends Spell {
 }
 
 export class GunAxe extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.useonly = true;
         this.proc = { magicdmg: 150 + 75 };
@@ -642,7 +643,7 @@ export class GunAxe extends Spell {
 }
 
 export class BlademasterFury extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Blademaster\'s Fury');
         this.cooldown = 120;
     }
@@ -668,7 +669,7 @@ export class BlademasterFury extends Spell {
 }
 
 export class ShieldSlam extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Shield Slam');
         this.cost = 20 - player.ragecostbonus;
         if (player.items.includes(231350))
@@ -701,7 +702,7 @@ export class ShieldSlam extends Spell {
 }
 
 export class Shockwave extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.cost = 15 - player.ragecostbonus;
         this.cooldown = player.shockwavecd ? 10 : 20;
@@ -730,7 +731,7 @@ export class Shockwave extends Spell {
 }
 
 export class TheMoltenCore extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'The Molten Core');
         this.useonly = true;
         this.proc = { magicdmg: 20 };
@@ -748,7 +749,7 @@ export class TheMoltenCore extends Spell {
 }
 
 export class UnstoppableMight extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Unstoppable Might');
         this.useonly = true;
         this.offensive = false;
@@ -806,7 +807,7 @@ export class UnstoppableMight extends Spell {
 }
 
 export class StanceSwitch extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Stance Switch');
         this.useonly = true;
         this.offensive = false;
@@ -821,7 +822,7 @@ export class StanceSwitch extends Spell {
 }
 
 export class GrilekFury extends Spell {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Grilek Fury');
         this.cooldown = 180;
         this.rage = 30;
@@ -852,7 +853,8 @@ export class GrilekFury extends Spell {
 /**************************************************** AURAS ****************************************************/
 
 export class Aura {
-    constructor(player, id, name) {
+    [key: string]: any;
+    constructor(player, id?, name?) {
         this.id = id;
         this.timer = 0;
         this.starttimer = 0;
@@ -895,7 +897,7 @@ export class Aura {
         if (spell.expriority) this.expriority = parseInt(spell.expriority);
 
     }
-    use() {
+    use(...args: any[]) {
         if (this.timer) this.uptime += (step - this.starttimer);
         this.timer = step + this.duration * 1000;
         this.starttimer = step;
@@ -943,7 +945,7 @@ export class Aura {
 }
 
 export class Recklessness extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 12;
         this.stats = { crit: this.player.mode == "sod" ? 50 : 100 };
@@ -974,7 +976,7 @@ export class Recklessness extends Aura {
 }
 
 export class Flurry extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 12;
         this.mult_stats = { haste: player.talents.flurry };
@@ -1000,7 +1002,7 @@ export class Flurry extends Aura {
 }
 
 export class DeepWounds extends Aura {
-    constructor(player, id, adjacent) {
+    constructor(player, id?, adjacent?) {
         super(player, id, 'Deep Wounds' + (adjacent ? ' ' + adjacent : ''));
         this.duration = 12;
         this.idmg = 0;
@@ -1066,7 +1068,7 @@ export class DeepWounds extends Aura {
 }
 
 export class OldDeepWounds extends Aura {
-    constructor(player, id, adjacent) {
+    constructor(player, id?, adjacent?) {
         super(player, id, 'Deep Wounds' + (adjacent ? ' ' + adjacent : ''));
         this.duration = 12;
         this.idmg = 0;
@@ -1102,7 +1104,7 @@ export class OldDeepWounds extends Aura {
 }
 
 export class Crusader extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 15;
         this.stats = { str: 100 };
@@ -1125,7 +1127,7 @@ export class Crusader extends Aura {
 }
 
 export class Cloudkeeper extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.stats = { ap: 100 };
@@ -1144,7 +1146,7 @@ export class Cloudkeeper extends Aura {
 }
 
 export class Felstriker extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 3;
         this.stats = { crit: 100, hit: 100 };
@@ -1168,7 +1170,7 @@ export class Felstriker extends Aura {
 }
 
 export class DeathWish extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Death Wish');
         this.duration = 30;
         this.mult_stats = { dmgmod: 20 };
@@ -1199,35 +1201,35 @@ export class DeathWish extends Aura {
 }
 
 export class BattleStance extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Battle Stance');
         this.stats = { };
     }
 }
 
 export class DefensiveStance extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Defensive Stance');
         this.mult_stats = { dmgmod: -10, spelldmgmod: -10, };
     }
 }
 
 export class BerserkerStance extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Berserker Stance');
         this.stats = { crit: 3 };
     }
 }
 
 export class GladiatorStance extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Gladiator Stance');
         this.mult_stats = { dmgmod: player.shield ? 10 : 0 };
     }
 }
 
 export class MightyRagePotion extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Mighty Rage Potion');
         this.stats = { str: 60 };
         this.duration = 20;
@@ -1259,7 +1261,7 @@ export class MightyRagePotion extends Aura {
 }
 
 export class BloodFury extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Blood Fury');
         this.duration = 15;
         this.mult_stats = { baseapmod: 25 };
@@ -1288,7 +1290,7 @@ export class BloodFury extends Aura {
 }
 
 export class Berserking extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
     }
@@ -1316,7 +1318,7 @@ export class Berserking extends Aura {
 }
 
 export class Empyrean extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.mult_stats = { haste: 20 };
@@ -1341,7 +1343,7 @@ export class Empyrean extends Aura {
 }
 
 export class Eskhandar extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 5;
         this.mult_stats = { haste: 30 };
@@ -1366,7 +1368,7 @@ export class Eskhandar extends Aura {
 }
 
 export class Zeal extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 15;
         this.stats = { moddmgdone: 10 };
@@ -1397,7 +1399,7 @@ export class Zeal extends Aura {
 }
 
 export class Annihilator extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 45;
         this.armor = 200;
@@ -1425,7 +1427,7 @@ export class Annihilator extends Aura {
 }
 
 export class Rivenspike extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.armor = 200;
@@ -1452,7 +1454,7 @@ export class Rivenspike extends Aura {
 }
 
 export class Bonereaver extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.armor = 700;
@@ -1478,7 +1480,7 @@ export class Bonereaver extends Aura {
 }
 
 export class Destiny extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.stats = { str: 200 };
@@ -1486,7 +1488,7 @@ export class Destiny extends Aura {
 }
 
 export class Untamed extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 8;
         this.stats = { str: 300 };
@@ -1495,7 +1497,7 @@ export class Untamed extends Aura {
 }
 
 export class Pummeler extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.mult_stats = { haste: 50 };
@@ -1523,7 +1525,7 @@ export class Pummeler extends Aura {
 }
 
 export class Windfury extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         if (this.wfap) this.stats = { ap: this.wfap };
         if (this.wfapperc) this.mult_stats = { apmod: this.wfapperc };
@@ -1563,7 +1565,7 @@ export class Windfury extends Aura {
 }
 
 export class Swarmguard extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.armor = 200;
@@ -1597,7 +1599,7 @@ export class Swarmguard extends Aura {
 }
 
 export class Flask extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 60;
         this.stats = { str: 75 };
@@ -1618,7 +1620,7 @@ export class Flask extends Aura {
 }
 
 export class Slayer extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 20;
         this.stats = { ap: 260 };
@@ -1637,7 +1639,7 @@ export class Slayer extends Aura {
 }
 
 export class Spider extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 15;
         this.mult_stats = { haste: 20 };
@@ -1656,7 +1658,7 @@ export class Spider extends Aura {
 }
 
 export class Earthstrike extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 20;
         this.stats = { ap: this.player.mode == "sod" ? 328 : 280 };
@@ -1674,7 +1676,7 @@ export class Earthstrike extends Aura {
 }
 
 export class Gabbar extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 20;
         this.name = 'Jom Gabbar';
@@ -1709,7 +1711,7 @@ export class Gabbar extends Aura {
 }
 
 export class PrimalBlessing extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Primal Blessing');
         this.duration = 12;
         this.stats = { ap: 300 };
@@ -1728,7 +1730,7 @@ export class PrimalBlessing extends Aura {
 }
 
 export class PrimalBlessing2 extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Primal Blessing 2');
         this.duration = 12;
         this.stats = { ap: 300 };
@@ -1747,7 +1749,7 @@ export class PrimalBlessing2 extends Aura {
 }
 
 export class BloodrageAura extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.name = 'Bloodrage';
@@ -1776,7 +1778,7 @@ export class BloodrageAura extends Aura {
 }
 
 export class Zandalarian extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 20;
         this.stats = { moddmgdone: 40 };
@@ -1818,7 +1820,7 @@ export class Zandalarian extends Aura {
 }
 
 export class Avenger extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.stats = { ap: 200 };
@@ -1827,7 +1829,7 @@ export class Avenger extends Aura {
 }
 
 export class BerserkerRageAura extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.name = 'Berserker Rage';
@@ -1848,7 +1850,7 @@ export class BerserkerRageAura extends Aura {
 }
 
 export class BattleShout extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 120 + (this.player.talents.boomingvoice * 36);
         this.cost = 10 - (this.player.talents.boomingvoice * 2);
@@ -1883,7 +1885,7 @@ export class BattleShout extends Aura {
 }
 
 export class ConsumedRage extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Consumed by Rage');
         this.duration = 12;
     }
@@ -1905,7 +1907,7 @@ export class ConsumedRage extends Aura {
 }
 
 export class Rend extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         let dur = this.value2 * 3;
         this.duration = Math.max(this.duration || dur, dur);
@@ -2003,7 +2005,7 @@ export class Rend extends Aura {
 }
 
 export class Vibroblade extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.armor = 100;
@@ -2027,7 +2029,7 @@ export class Vibroblade extends Aura {
 }
 
 export class Ultrasonic extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.armor = 160;
@@ -2051,7 +2053,7 @@ export class Ultrasonic extends Aura {
 }
 
 export class VoidMadness extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Void Madness');
         this.duration = 10;
         this.mult_stats = { haste: 10 };
@@ -2102,7 +2104,7 @@ export class WeaponBleed extends Aura {
 }
 
 export class Ragehammer extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 15;
         this.stats = { ap: 20 }
@@ -2129,7 +2131,7 @@ export class Ragehammer extends Aura {
 }
 
 export class BlisteringRagehammer extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Blistering Ragehammer');
         this.duration = 15;
         this.stats = { moddmgdone: 30 };
@@ -2162,7 +2164,7 @@ export class BlisteringRagehammer extends Aura {
 }
 
 export class Jackhammer extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.mult_stats = { haste: 30 };
@@ -2186,7 +2188,7 @@ export class Jackhammer extends Aura {
 }
 
 export class LordGeneral extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.stats = { ap: 50 };
@@ -2194,7 +2196,7 @@ export class LordGeneral extends Aura {
 }
 
 export class Stoneslayer extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 8;
         this.stats = { moddmgdone: 10 };
@@ -2224,7 +2226,7 @@ export class Stoneslayer extends Aura {
 }
 
 export class CleaveArmor extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 20;
         this.armor = 300;
@@ -2248,7 +2250,7 @@ export class CleaveArmor extends Aura {
 }
 
 export class StrengthChampion extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.stats = { str: 120 };
@@ -2271,7 +2273,7 @@ export class StrengthChampion extends Aura {
 }
 
 export class MildlyIrradiated extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Mildly Irradiated');
         this.duration = 15;
         this.stats = { ap: 40 };
@@ -2298,7 +2300,7 @@ export class MildlyIrradiated extends Aura {
 }
 
 export class GyromaticAcceleration extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Gyromatic Acceleration');
         this.duration = 20;
         this.mult_stats = { haste: 5 };
@@ -2315,7 +2317,7 @@ export class GyromaticAcceleration extends Aura {
 }
 
 export class Spicy extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Spicy!');
         this.duration = 30;
         this.mult_stats = { haste: 4 };
@@ -2353,7 +2355,7 @@ export class Spicy extends Aura {
 }
 
 export class GneuroLogical extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Gneuro-Logical Shock');
         this.duration = 10;
         this.mult_stats = { haste: 20 };
@@ -2370,7 +2372,7 @@ export class GneuroLogical extends Aura {
 }
 
 export class CoinFlip extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Coin Flip');
         this.duration = 30;
         this.stats = { crit: 3 };
@@ -2391,7 +2393,7 @@ export class CoinFlip extends Aura {
 }
 
 export class Rampage extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.mult_stats = { apmod: 10 };
@@ -2420,7 +2422,7 @@ export class Rampage extends Aura {
 }
 
 export class WreckingCrew extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Wrecking Crew');
         this.duration = 12;
     }
@@ -2442,7 +2444,7 @@ export class WreckingCrew extends Aura {
 }
 
 export class SerpentAscension extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Serpent\'s Ascension');
         this.duration = 12;
         this.stats = { ap: 150 };
@@ -2461,7 +2463,7 @@ export class SerpentAscension extends Aura {
 }
 
 export class VoodooFrenzy extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Voodoo Frenzy');
         this.duration = 10;
         this.cooldown = 40;
@@ -2481,7 +2483,7 @@ export class VoodooFrenzy extends Aura {
 }
 
 export class RoarGuardian extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Roar of the Guardian');
         this.duration = 20;
         this.stats = { ap: 70 };
@@ -2499,7 +2501,7 @@ export class RoarGuardian extends Aura {
 }
 
 export class RelentlessStrength extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Relentless Strength');
         this.duration = 20;
         this.stats = { moddmgdone: 20 };
@@ -2541,7 +2543,7 @@ export class RelentlessStrength extends Aura {
 }
 
 export class EchoesDread extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Echoes of Dread');
         this.duration = 10;
         this.stats = { ap: 50 };
@@ -2562,7 +2564,7 @@ export class EchoesDread extends Aura {
 }
 
 export class FreshMeat extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Fresh Meat');
         this.duration = 12;
         this.mult_stats = { dmgmod: 10 };
@@ -2586,7 +2588,7 @@ export class FreshMeat extends Aura {
 }
 
 export class SuddenDeath extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Sudden Death');
         this.duration = 10;
     }
@@ -2611,7 +2613,7 @@ export class SuddenDeath extends Aura {
 }
 
 export class WarriorsResolve extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Warrior\'s Resolve');
     }
     use() {
@@ -2624,7 +2626,7 @@ export class WarriorsResolve extends Aura {
 }
 
 export class EchoesBattle extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Echoes of Battle Stance');
         this.duration = 15;
     }
@@ -2637,7 +2639,7 @@ export class EchoesBattle extends Aura {
 }
 
 export class EchoesZerk extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Echoes of Berserker Stance');
         this.duration = 15;
     }
@@ -2650,7 +2652,7 @@ export class EchoesZerk extends Aura {
 }
 
 export class EchoesDef extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Echoes of Defensive Stance');
         this.duration = 15;
     }
@@ -2663,7 +2665,7 @@ export class EchoesDef extends Aura {
 }
 
 export class EchoesGlad extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Echoes of Gladiator Stance');
         this.duration = 15;
     }
@@ -2676,7 +2678,7 @@ export class EchoesGlad extends Aura {
 }
 
 export class BattleForecast extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Battle Forecast');
         this.mult_stats = { dmgmod: 10 };
         this.duration = 15;
@@ -2693,7 +2695,7 @@ export class BattleForecast extends Aura {
 }
 
 export class ZerkForecast extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Berserker Forecast');
         this.stats = { crit: 10 };
         this.duration = 15;
@@ -2701,14 +2703,14 @@ export class ZerkForecast extends Aura {
 }
 
 export class DefForecast extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Defensive Forecast');
         this.duration = 15;
     }
 }
 
 export class GladForecast extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Gladiator Forecast');
         this.mult_stats = { dmgmod: 10 };
         this.duration = 15;
@@ -2725,7 +2727,7 @@ export class GladForecast extends Aura {
 }
 
 export class DefendersResolve extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Defender\'s Resolve');
         this.duration = 15;
     }
@@ -2749,7 +2751,7 @@ export class DefendersResolve extends Aura {
 }
 
 export class MeltArmor extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Melt Armor');
         this.duration = 10;
         this.stats.moddmgtaken = 10;
@@ -2772,7 +2774,7 @@ export class MeltArmor extends Aura {
 }
 
 export class SingleMinded extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 10;
         this.stacks = 0;
@@ -2799,7 +2801,7 @@ export class SingleMinded extends Aura {
 }
 
 export class DemonTaintedBlood extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Demon-Tainted Blood');
         this.duration = 20;
         this.stats = { str: 80 };
@@ -2826,7 +2828,7 @@ export class DemonTaintedBlood extends Aura {
 }
 
 export class MoonstalkerFury extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Moonstalker Fury');
         this.duration = 15;
         this.stats = { str: 60 };
@@ -2853,7 +2855,7 @@ export class MoonstalkerFury extends Aura {
 }
 
 export class MagmadarsReturn extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Magmadar\'s Return');
         this.duration = 12;
         this.mult_stats = { haste: 10 };
@@ -2872,7 +2874,7 @@ export class MagmadarsReturn extends Aura {
 }
 
 export class JujuFlurry extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Juju Flurry');
         this.duration = 20;
         this.cooldown = 60;
@@ -2909,7 +2911,7 @@ export class JujuFlurry extends Aura {
 }
 
 export class WrathWray extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Wrath of Wray');
         this.duration = 20;
         this.stats = { str: 92 };
@@ -2936,7 +2938,7 @@ export class WrathWray extends Aura {
 }
 
 export class CrusaderZeal extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 8;
         this.stats = { moddmgdone: 15 };
@@ -2970,7 +2972,7 @@ export class CrusaderZeal extends Aura {
 }
 
 export class GrilekGuard extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id, 'Gri\'lek\'s Guard');
         this.duration = 20;
         this.stats = { block: 200 };
@@ -2997,7 +2999,7 @@ export class GrilekGuard extends Aura {
 }
 
 export class ObsidianStrength extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 30;
         this.stats = { str: 120 };
@@ -3006,7 +3008,7 @@ export class ObsidianStrength extends Aura {
 }
 
 export class ObsidianHaste extends Aura {
-    constructor(player, id) {
+    constructor(player, id?) {
         super(player, id);
         this.duration = 15;
         this.stats = { moddmgdone: 20 };
@@ -3037,7 +3039,7 @@ export const SPELL_CLASSES = {
     WrathWray, Zandalarian, Zeal,
 };
 
-export function createSpell(name, player, id) {
+export function createSpell(name, player, id?) {
     const cls = SPELL_CLASSES[name];
     if (!cls) throw new Error('unknown spell class: ' + name);
     return new cls(player, id);

@@ -1,4 +1,4 @@
-export const gear = {
+export const gear: any = {
   "head": [
     {
       "id": 1280,

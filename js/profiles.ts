@@ -1,10 +1,10 @@
-import { SIM } from './sim-ns.js';
-import { mode, gear, runes } from './data/mode.js';
-import { enchant } from './data/enchants.js';
-import { buffs } from './data/buffs.js';
-import { spells } from './data/spells.js';
-import { talents } from './data/talents.js';
-import { preset_thbwl, preset_dwbwl, preset_thaq, preset_dwaq } from './data/presets.js';
+import { SIM } from './sim-ns.ts';
+import { mode, gear, runes } from './data/mode.ts';
+import { enchant } from './data/enchants.ts';
+import { buffs } from './data/buffs.ts';
+import { spells } from './data/spells.ts';
+import { talents } from './data/talents.ts';
+import { preset_thbwl, preset_dwbwl, preset_thaq, preset_dwaq } from './data/presets.ts';
 
 SIM.PROFILES = {
 
@@ -309,7 +309,7 @@ SIM.PROFILES = {
 
         let index = profile.data('index');
         let storage = JSON.parse(localStorage[mode + index]);
-        let minified = {};
+        let minified: any = {};
 
 
         for(let prop in storage) {
@@ -325,7 +325,7 @@ SIM.PROFILES = {
         minified.rotation = [];
         for (let spell of storage.rotation) {
             if (spell.active) {
-                let obj = {};
+                let obj: any = {};
                 obj.id = spell.id;
                 if (typeof spell.duration !== 'undefined') obj.duration = spell.duration;
                 if (typeof spell.durationactive !== 'undefined') obj.durationactive = spell.durationactive;

@@ -1,8 +1,9 @@
-import { SIM } from './sim-ns.js';
-import { mode, gear, runes } from './data/mode.js';
-import { buffs } from './data/buffs.js';
-import { spells } from './data/spells.js';
-import { talents } from './data/talents.js';
+import { SIM } from './sim-ns.ts';
+import { WEB_DB_URL } from './ui.ts';
+import { mode, gear, runes } from './data/mode.ts';
+import { buffs } from './data/buffs.ts';
+import { spells } from './data/spells.ts';
+import { talents } from './data/talents.ts';
 
 SIM.SETTINGS = {
 

@@ -1,4 +1,4 @@
-export const talents = [
+export const talents: any[] = [
    {
       n: 'Arms',
       t: [

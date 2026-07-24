@@ -1,4 +1,4 @@
-export const runes = {
+export const runes: any = {
    "chest": [
       {
          id: 402877,
