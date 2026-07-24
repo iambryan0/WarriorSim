@@ -6,6 +6,21 @@ questions.
 
 ## Phase 0 — Recon and safety net
 
+### Seedable PRNG injection (branch `phase0/rng-injection`)
+- Added `js/rng.js` (`RNG.random`, defaulting to `Math.random`;
+  `RNG.seed(n)` swaps in mulberry32). Rewired the three engine randomness
+  sites (`rng`/`rng10k` in simulation.js, `getGlanceReduction` in player.js)
+  to `RNG.random()`. Loaded first by `sim-worker.js`, both HTML pages, and
+  the harness sandbox; harness now seeds via `RNG.seed()` instead of
+  overriding `Math.random`.
+- `dist/` counterparts regenerated with terser (default settings — no
+  top-level mangling, required by the engine's `eval('new ClassName(...)')`
+  instantiation). The gulp pipeline being dead on modern Node, this is the
+  interim dist story until Vite lands in Phase 1.
+- Verified: `check.mjs` — all 11 goldens byte-identical to the
+  pre-refactor snapshots (same seed, same sequence through the new
+  indirection). Production default path unchanged (`Math.random`).
+
 ### Parity harness (branch `phase0/parity-harness`)
 - Added `test/headless/` (vm-sandbox runner, fixture capture, golden check)
   and 11 fixtures + goldens derived from the four shipped presets. No engine

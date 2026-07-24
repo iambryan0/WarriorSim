@@ -989,7 +989,7 @@ class Player {
         let diff = this.target.defense - this.stats['skill_' + weapon.type];
         let low = Math.max(Math.min(1.3 - 0.05 * diff, 0.91), 0.01);
         let high = Math.max(Math.min(1.2 - 0.03 * diff, 0.99), 0.2);
-        return Math.random() * (high - low) + low;
+        return RNG.random() * (high - low) + low;
     }
     getGlanceChance(weapon) {
         return 10 + Math.max(this.target.defense - Math.min(this.level * 5, this.stats['skill_' + weapon.type]), 0) * 2;
