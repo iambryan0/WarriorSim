@@ -4,6 +4,30 @@ Running log of the modernization (see `PROMPT.MD` for the plan). Newest first
 within each phase. Every entry: what changed, how it was verified, open
 questions.
 
+## Phase 1 — Vite + TypeScript migration
+
+### Vite replaces gulp (branch `phase1/vite-build`)
+- `vite.config.js`: MPA build with `index.html` + `classic.html` as inputs;
+  `npm run dev/build/preview`. gulp, its deps, and the committed `dist/`
+  artifacts are gone; `dist/` is now the gitignored Vite output.
+- Vendored assets moved out of `dist/` into `public/` (`libs/` jQuery/
+  tablesorter/Chart, `css/theme.default.min.css`, `img/`, `favicon.ico`).
+  Favicon href changed from the GitHub-Pages `/WarriorSim/` prefix to `/` —
+  deployment target is Cloudflare Pages at the domain root.
+- `scss/style.scss` now compiles through Vite via the first module entry
+  (`js/main.js`); race-icon urls in `sidebar.scss` switched from `../img/` to
+  `/img/` (public asset refs, resolved identically in dev and build).
+- Interim until the ESM conversion: engine/UI files stay classic ordered
+  `<script>` tags pointing at raw `js/` sources (unminified), copied verbatim
+  into the build by the `copy-legacy-js` plugin. Worker path is now
+  `/js/sim-worker.js` (was `dist/js/sim-worker.min.js`), `importScripts`
+  un-minified to match.
+- Verified: parity green (engine edits were path strings only); `npm run
+  build` output serves with every referenced asset resolving (curl sweep over
+  both pages' src/href); dev server serves both pages, worker, libs, images.
+- Known noise: Dart Sass deprecation warnings for `@import` in the scss —
+  left as-is (migrating to `@use` is cosmetic churn; revisit if Sass 3 lands).
+
 ## Phase 0 — Recon and safety net
 
 ### Seedable PRNG injection (branch `phase0/rng-injection`)

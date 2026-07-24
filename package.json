@@ -1,26 +1,19 @@
 {
-  "name": "package",
+  "name": "warriorsim",
   "version": "1.0.0",
   "description": "WarriorSim",
-  "main": "main.js",
-  "devDependencies": {
-    "browser-sync": "^3.0.3",
-    "gulp": "^5.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.3",
-    "gulp-minify": "^3.1.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-uglify": "^3.0.2"
-  },
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dist": "gulp sass && gulp js-build",
-    "dev": "gulp",
-    "start": "gulp"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "parity": "node test/headless/check.mjs"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.100.0",
+    "vite": "^8.1.5"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "gulp-rename": "^2.0.0",
-    "gulp-strip-code": "^0.1.4"
-  }
+  "license": "ISC"
 }
