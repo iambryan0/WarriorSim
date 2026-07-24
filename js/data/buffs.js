@@ -1,4 +1,4 @@
-var buffs = [
+export const buffs = [
    {
       id: 2457,
       spellid: true,
@@ -1371,3 +1371,7 @@ var buffs = [
    
    
 ];
+
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { buffs });

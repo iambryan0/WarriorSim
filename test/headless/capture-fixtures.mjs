@@ -19,7 +19,7 @@ const spellsData = JSON.parse(vm.runInContext('JSON.stringify(spells)', ctx));
 
 const presetsSrc = fs.readFileSync(path.join(ROOT, 'js/data/presets.js'), 'utf8');
 const presets = {};
-for (const [, name, b64] of presetsSrc.matchAll(/^var preset_(\w+) = '([^']+)';/gm)) {
+for (const [, name, b64] of presetsSrc.matchAll(/^export const preset_(\w+) = '([^']+)';/gm)) {
     presets[name] = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
 }
 

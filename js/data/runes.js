@@ -1,4 +1,4 @@
-var runes = {
+export const runes = {
    "chest": [
       {
          id: 402877,
@@ -210,3 +210,7 @@ var runes = {
         },
     ],
 };
+
+// Interim ESM-migration shim: classic scripts still reference these by bare
+// global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { runes });

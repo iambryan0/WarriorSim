@@ -38,7 +38,20 @@ export const SOD_DATA = ['js/data/gear_sod.js', 'js/data/runes.js'];
 export const CLASSIC_DATA = ['js/data/gear.js'];
 
 // Repo-relative paths of files already converted to ES modules.
-export const ESM = new Set([]);
+export const ESM = new Set([
+    'js/rng.js',
+    'js/data/buffs.js',
+    'js/data/enchants.js',
+    'js/data/gear.js',
+    'js/data/gear_sod.js',
+    'js/data/levelstats.js',
+    'js/data/presets.js',
+    'js/data/runes.js',
+    'js/data/session.js',
+    'js/data/session_sod.js',
+    'js/data/spells.js',
+    'js/data/talents.js',
+]);
 
 // trace: optional array that collects console.log first-arguments (the
 // engine's /* start-log */ event log when player config has logging: true).
