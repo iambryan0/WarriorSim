@@ -1,4 +1,4 @@
-export const session = {
+export const session: any = {
     "level": "60",
     "race": "Human",
     "simulations": "50000",

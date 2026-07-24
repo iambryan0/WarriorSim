@@ -4,10 +4,10 @@
 // entries and the worker install everything here before the engine or UI
 // runs, and consumers import these live bindings. `runes` stays undefined in
 // classic mode — the engine's `typeof runes` guards keep working unchanged.
-export let mode;
-export let gear;
-export let runes;
-export let session;
+export let mode: string | undefined;
+export let gear: any;
+export let runes: any;
+export let session: any;
 
 export function installModeData(tables) {
     mode = tables.mode;

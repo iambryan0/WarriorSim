@@ -4,11 +4,11 @@
 // remain vendored classic scripts in public/libs — they run before any
 // module and are reached as globals.
 import '../scss/style.scss';
-import { SIM } from './sim-ns.js';
-import './ui.js';
-import './settings.js';
-import './stats.js';
-import './profiles.js';
+import { SIM } from './sim-ns.ts';
+import './ui.ts';
+import './settings.ts';
+import './stats.ts';
+import './profiles.ts';
 
 $(document).ready(function () {
     SIM.UI.init();

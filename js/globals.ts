@@ -1,11 +1,11 @@
-import { gear, runes } from './data/mode.js';
-import { buffs } from './data/buffs.js';
-import { enchant } from './data/enchants.js';
-import { spells } from './data/spells.js';
-import { talents } from './data/talents.js';
+import { gear, runes } from './data/mode.ts';
+import { buffs } from './data/buffs.ts';
+import { enchant } from './data/enchants.ts';
+import { spells } from './data/spells.ts';
+import { talents } from './data/talents.ts';
 
 export function getGlobalsDelta() {
-    const _gear = {};
+    const _gear: any = {};
     for (const type in gear) {
         if (type == 'custom') continue;
         _gear[type] = gear[type].map((item) => {
@@ -17,7 +17,7 @@ export function getGlobalsDelta() {
             }
         });
     }
-    const _enchant = {};
+    const _enchant: any = {};
     for (const type in enchant) {
         _enchant[type] = enchant[type].map((item) => {
             return {
@@ -28,7 +28,7 @@ export function getGlobalsDelta() {
             }
         });
     }
-    const _runes = {};
+    const _runes: any = {};
     if (typeof runes !== "undefined") {
         for (const type in runes) {
             _runes[type] = runes[type].map((item) => {

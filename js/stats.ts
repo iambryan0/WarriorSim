@@ -1,5 +1,5 @@
-import { SIM } from './sim-ns.js';
-import { spells } from './data/spells.js';
+import { SIM } from './sim-ns.ts';
+import { spells } from './data/spells.ts';
 
 SIM.STATS = {
 
@@ -58,7 +58,7 @@ SIM.STATS = {
             let aura = sim.player.auras[name];
             if (!aura.uptime) continue;
             view.auradata.labels.push(aura.name);
-            data.push(Math.min((aura.uptime / sim.totalduration / 10).toFixed(2), 100));
+            data.push(Math.min((aura.uptime / sim.totalduration / 10).toFixed(2) as any, 100));
             colors.push(view.colors[counter % view.colors.length]);
             counter++;
         }
@@ -319,7 +319,7 @@ SIM.STATS = {
             let total = data.reduce((a, b) => a + b, 0);
             if (!total) continue;
             let dps = (sim.player.spells[name].totaldmg / sim.totalduration).toFixed(2);
-            let dpr = ((sim.player.spells[name].totaldmg / i) / (sim.player.spells[name].cost * (total / i))).toFixed(2);
+            let dpr: any = ((sim.player.spells[name].totaldmg / i) / (sim.player.spells[name].cost * (total / i))).toFixed(2);
             if (name == "slam" && sim.player.bloodsurge)
                 dpr = Infinity;
             if (name == "execute")

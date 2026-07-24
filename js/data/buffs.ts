@@ -1,4 +1,4 @@
-export const buffs = [
+export const buffs: any[] = [
    {
       id: 2457,
       spellid: true,

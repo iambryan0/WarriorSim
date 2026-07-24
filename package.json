@@ -8,10 +8,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "parity": "node test/headless/check.mjs"
+    "parity": "node test/headless/check.mjs",
+    "typecheck": "tsc --noEmit",
+    "parity:bundle": "node test/headless/check-bundle.mjs"
   },
   "devDependencies": {
     "sass-embedded": "^1.100.0",
+    "typescript": "^7.0.2",
     "vite": "^8.1.5"
   },
   "author": "",

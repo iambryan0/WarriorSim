@@ -1,6 +1,6 @@
-import { RNG } from '../rng.js';
-import { rng, rng10k, step, RESULT, DEFENSETYPE, SCHOOL } from './simulation.js';
-import { Weapon, WEAPONTYPE } from './weapon.js';
+import { RNG } from '../rng.ts';
+import { rng, rng10k, step, RESULT, DEFENSETYPE, SCHOOL } from './simulation.ts';
+import { Weapon, WEAPONTYPE } from './weapon.ts';
 import {
     createSpell,
     // direct aura/stance instantiations
@@ -13,16 +13,17 @@ import {
     // instanceof checks
     Bloodthirst, Cleave, Execute, HeroicStrike, MortalStrike, Overpower,
     QuickStrike, ShieldSlam, Slam, SunderArmor, ThunderClap, Whirlwind,
-} from './spell.js';
-import { gear, runes } from '../data/mode.js';
-import { buffs } from '../data/buffs.js';
-import { enchant, sets } from '../data/enchants.js';
-import { levelstats } from '../data/levelstats.js';
-import { spells } from '../data/spells.js';
-import { talents } from '../data/talents.js';
+} from './spell.ts';
+import { gear, runes } from '../data/mode.ts';
+import { buffs } from '../data/buffs.ts';
+import { enchant, sets } from '../data/enchants.ts';
+import { levelstats } from '../data/levelstats.ts';
+import { spells } from '../data/spells.ts';
+import { talents } from '../data/talents.ts';
 
 export class Player {
-    static getConfig(base) {
+    [key: string]: any;
+    static getConfig(base?) {
         return {
             level: $('input[name="level"]').val(),
             race: $('select[name="race"]').val(),
@@ -44,7 +45,7 @@ export class Player {
             },
         };
     }
-    constructor(testItem, testType, enchtype, config) {
+    constructor(testItem?, testType?, enchtype?, config?) {
         if (!config) config = Player.getConfig();
         this.rage = 0;
         this.ragemod = 1;
@@ -286,7 +287,7 @@ export class Player {
 
 
                     if (item.proc && item.proc.chance && (type == "trinket1" || type == "trinket2")) {
-                        let proc = {};
+                        let proc: any = {};
                         proc.chance = item.proc.chance * 100;
                         proc.extra = item.proc.extra;
                         proc.magicdmg = item.proc.dmg;
@@ -298,7 +299,7 @@ export class Player {
                         this["trinketproc" + (this.trinketproc1 ? 2 : 1)] = proc;
                     }
                     else if (item.proc && item.proc.chance) {
-                        let proc = {}
+                        let proc: any = {}
                         proc.chance = item.proc.chance * 100;
                         if (item.proc.dmg) proc.magicdmg = item.proc.dmg;
                         if (item.proc.spell) {
@@ -525,7 +526,7 @@ export class Player {
                     }
 
                     if (bonus.stats.procchance) {
-                        let proc = {}
+                        let proc: any = {}
                         proc.chance = bonus.stats.procchance * 100;
                         if (bonus.stats.magicdmg) proc.magicdmg = bonus.stats.magicdmg;
                         if (bonus.stats.procspell) {
@@ -847,7 +848,7 @@ export class Player {
         return 1 - 15 * (this.target.resistance / (this.level * 100));
     }
     getTargetSpellBinaryResist() {
-        return parseInt(10000 - ((10000 - this.target.misschance) * (1 - (this.target.resistance * 0.15 / (this.level * 100)))))
+        return parseInt((10000 - ((10000 - this.target.misschance) * (1 - (this.target.resistance * 0.15 / (this.level * 100))))) as any)
     }
     updateStrength() {
         this.stats.str = this.base.str;
@@ -1126,7 +1127,7 @@ export class Player {
             this.dodgetimer -= a;
         }
     }
-    stepauras(nobleeds) {
+    stepauras(nobleeds?) {
 
         if (this.mh.proc1 && this.mh.proc1.spell && this.mh.proc1.spell.timer) this.mh.proc1.spell.step();
         if (this.mh.proc2 && this.mh.proc2.spell && this.mh.proc2.spell.timer) this.mh.proc2.spell.step();
@@ -1281,7 +1282,7 @@ export class Player {
         if (roll < tmp) return RESULT.CRIT;
         return RESULT.HIT;
     }
-    rollmeleespell(spell, weapon) {
+    rollmeleespell(spell, weapon?) {
         if (!weapon) weapon = this.mh;
         let tmp = 0;
         let roll = rng10k();
@@ -1485,7 +1486,7 @@ export class Player {
         /* start-log */ if (this.logging) this.log(`${spell.name} (OH) for ${~~done} (${Object.keys(RESULT)[result]})${adjacent ? ' (Adjacent)' : ''}.`); /* end-log */
         return done + procdmg;
     }
-    dealdamage(dmg, result, weapon, spell, adjacent) {
+    dealdamage(dmg, result, weapon?, spell?, adjacent?) {
         if (result != RESULT.MISS && result != RESULT.DODGE) {
             if(spell == null || spell.school == SCHOOL.PHYSICAL)
               dmg *= (1 - this.armorReduction);
@@ -1497,7 +1498,7 @@ export class Player {
             return 0;
         }
     }
-    proccrit(offhand, adjacent, spell) {
+    proccrit(offhand, adjacent?, spell?) {
         this.crittimer = 1;
         if (this.auras.flurry) this.auras.flurry.use();
         if (this.auras.deepwounds) {
@@ -1507,7 +1508,7 @@ export class Player {
         if (this.auras.wreckingcrew) this.auras.wreckingcrew.use();
         if (this.overpowerrend && this.auras.rend && this.auras.rend.timer && spell instanceof Overpower) this.auras.rend.refresh();
     }
-    procattack(spell, weapon, result, adjacent, damageSoFar) {
+    procattack(spell, weapon, result, adjacent?, damageSoFar?) {
         let procdmg = 0;
         let extras = 0;
         let batchedextras = 0;

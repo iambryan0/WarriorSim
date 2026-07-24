@@ -1,4 +1,4 @@
-export const spells = [
+export const spells: any[] = [
 
 // Rend
 {

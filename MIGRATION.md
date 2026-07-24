@@ -6,6 +6,31 @@ questions.
 
 ## Phase 1 — Vite + TypeScript migration
 
+### TypeScript rename, permissive compile (branch `phase1/ts-rename`)
+- Every `js/**/*.js` → `.ts` (git mv, history preserved); import specifiers
+  and harness paths follow. Node ≥23.6 type-stripping runs the `.ts` engine
+  directly, so the parity harness needed only path updates; Vite handles
+  `.ts` entries/worker natively. `tsc --noEmit` passes on a deliberately
+  permissive tsconfig (strict/noImplicitAny off — tightening is the next
+  step, per the brief).
+- Getting to zero tsc errors (5139 → 0) used only type-level edits: index
+  signatures on the core classes, `any` annotations on empty-object literals
+  and the data tables (schema-typed properly in Phase 2), optional trailing
+  params where JS call sites legitimately pass fewer args, base
+  `Spell/Aura.use/dmg(...args)` so subclass overrides stay assignable, and
+  `as any` casts on loose parseInt/toFixed coercions. Zero runtime-visible
+  changes, confirmed by parity.
+- **tsc caught two real regressions the ESM-UI conversion had shipped**,
+  both invisible to the engine-only parity harness:
+  - `ui.ts` assigned `player` without declaration — a sloppy-mode implicit
+    global that throws in strict module code, breaking the Run button.
+    Fixed with a module-scoped `let player`.
+  - `WEB_DB_URL` lived in ui.js but was used from settings.js — worked as a
+    cross-script global, broke under module scoping. Now exported/imported.
+  Lesson recorded: UI has no automated coverage; browser smoke after UI
+  changes is mandatory until it does.
+- New npm scripts: `typecheck`, `parity:bundle`.
+
 ### UI to ES modules, fully bundled site (branch `phase1/esm-ui`)
 - ui.js/settings.js/stats.js/profiles.js are ES modules importing the engine
   and data explicitly; the shared `SIM` namespace lives in `js/sim-ns.js`

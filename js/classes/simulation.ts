@@ -1,8 +1,8 @@
-import { RNG } from '../rng.js';
-import { spells } from '../data/spells.js';
-import { talents } from '../data/talents.js';
-import { getGlobalsDelta } from '../globals.js';
-import { BlademasterFury, Shockwave, Slam, ThunderClap, Whirlwind } from './spell.js';
+import { RNG } from '../rng.ts';
+import { spells } from '../data/spells.ts';
+import { talents } from '../data/talents.ts';
+import { getGlobalsDelta } from '../globals.ts';
+import { BlademasterFury, Shockwave, Slam, ThunderClap, Whirlwind } from './spell.ts';
 
 export const RESULT = {
     HIT: 0,
@@ -42,8 +42,9 @@ export const TYPE = {
 }
 
 export class SimulationWorker {
+    [key: string]: any;
     constructor(callback_finished, callback_update, callback_error) {
-        this.worker = new Worker(new URL('../sim-worker.js', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('../sim-worker.ts', import.meta.url), { type: 'module' });
         this.worker.onerror = (...args) => {
             callback_error(...args);
             this.worker.terminate();
@@ -76,6 +77,7 @@ export class SimulationWorker {
 }
 
 export class SimulationWorkerParallel {
+    [key: string]: any;
     constructor(threads, callback_finished, callback_update, callback_error) {
         this.threads = threads;
         this.callback_finished = callback_finished;
@@ -180,6 +182,7 @@ export class SimulationWorkerParallel {
 }
 
 export class Simulation {
+    [key: string]: any;
     static getConfig() {
         return {
             timesecsmin: parseInt($('input[name="timesecsmin"]').val()),
@@ -248,7 +251,7 @@ export class Simulation {
         player.reset(this.startrage);
         this.maxsteps = rng(this.timesecsmin * 1000, this.timesecsmax * 1000);
         this.duration = this.maxsteps / 1000;
-        this.executestep = this.maxsteps - parseInt(this.maxsteps * (this.executeperc / 100));
+        this.executestep = this.maxsteps - parseInt((this.maxsteps * (this.executeperc / 100)) as any);
         if (player.spells.execute) player.spells.execute.executestep = this.executestep;
         let delayedspell, delayedheroic;
         let spellcheck = false;
@@ -268,7 +271,7 @@ export class Simulation {
 
         // prepull actions
         let prepull = [];
-        for(let aura of Object.values(player.auras)) {
+        for(let aura of Object.values(player.auras) as any[]) {
             if (aura.usestep < 0) prepull.push(aura);
         }
         prepull.sort((a,b) => (b.usestep - a.usestep));
