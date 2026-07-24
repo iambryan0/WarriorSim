@@ -2,6 +2,7 @@
 // Spawned by SimulationWorker (js/classes/simulation.js) with
 // { type: 'module' }. The mode-specific gear tables are loaded on demand from
 // the first message, mirroring the old conditional importScripts.
+import { RNG } from './rng.js';
 import { Player } from './classes/player.js';
 import { Simulation, TYPE } from './classes/simulation.js';
 import { updateGlobals } from './globals.js';
@@ -9,6 +10,10 @@ import { installModeData } from './data/mode.js';
 
 onmessage = async (event) => {
     const params = event.data;
+    // Deterministic runs (bundle parity checks now, Rust/WASM validation in
+    // Phase 3) can pass a seed through the normal message protocol. The UI
+    // never sets it, so production behavior is unchanged.
+    if (params.seed !== undefined) RNG.seed(params.seed);
     if (params.globals.sod) {
         const [{ gear }, { runes }] = await Promise.all([
             import('./data/gear_sod.js'),

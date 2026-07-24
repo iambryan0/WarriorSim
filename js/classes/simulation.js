@@ -43,7 +43,7 @@ export const TYPE = {
 
 export class SimulationWorker {
     constructor(callback_finished, callback_update, callback_error) {
-        this.worker = new Worker('/js/sim-worker.js', { type: 'module' });
+        this.worker = new Worker(new URL('../sim-worker.js', import.meta.url), { type: 'module' });
         this.worker.onerror = (...args) => {
             callback_error(...args);
             this.worker.terminate();
@@ -745,6 +745,3 @@ function avg(min, max) {
     return (min + max) / 2;
 }
 
-// Interim ESM-migration shim: classic scripts (ui.js) still reference these
-// by bare global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { Simulation, SimulationWorker, SimulationWorkerParallel });

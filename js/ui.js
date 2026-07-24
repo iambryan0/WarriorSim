@@ -1,7 +1,15 @@
+import { SIM } from './sim-ns.js';
+import { Player } from './classes/player.js';
+import { Simulation, SimulationWorker, SimulationWorkerParallel } from './classes/simulation.js';
+import { updateGlobals } from './globals.js';
+import { mode, gear, runes, session } from './data/mode.js';
+import { enchant, sets } from './data/enchants.js';
+import { buffs } from './data/buffs.js';
+import { spells } from './data/spells.js';
+import { talents } from './data/talents.js';
+
 const MAX_WORKERS = ~~Math.min(8, (navigator.hardwareConcurrency || 8) / 2);
 const WEB_DB_URL = "https://classic.wowhead.com/";
-
-var SIM = SIM || {}
 
 SIM.UI = {
 

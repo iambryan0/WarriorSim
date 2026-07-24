@@ -10,12 +10,11 @@
 // same items as the browser's full getGlobalsDelta() payload.
 import fs from 'node:fs';
 import path from 'node:path';
-import vm from 'node:vm';
-import { createEngineContext, ROOT } from './sandbox.mjs';
+import { loadEngine, hostConsole, ROOT } from './sandbox.mjs';
 
-const ctx = await createEngineContext({ sod: true, extraScripts: ['js/data/session_sod.js'] });
-const session = JSON.parse(vm.runInContext('JSON.stringify(session)', ctx));
-const spellsData = JSON.parse(vm.runInContext('JSON.stringify(spells)', ctx));
+const engine = await loadEngine({ sod: true });
+const session = structuredClone(engine.session);
+const spellsData = structuredClone(engine.spells);
 
 const presetsSrc = fs.readFileSync(path.join(ROOT, 'js/data/presets.js'), 'utf8');
 const presets = {};
@@ -140,5 +139,5 @@ for (const [name, presetName, overrides, mutate] of FIXTURES) {
     };
     const file = path.join(outDir, name + '.json');
     fs.writeFileSync(file, JSON.stringify(fixture, null, 2) + '\n');
-    console.error(`wrote ${path.relative(ROOT, file)} (${storage.profilename})`);
+    hostConsole.error(`wrote ${path.relative(ROOT, file)} (${storage.profilename})`);
 }

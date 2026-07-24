@@ -1,7 +1,7 @@
 // Entry for classic.html (era).
-import './main.js';
 import { gear } from './data/gear.js';
+import { session } from './data/session.js';
 import { installModeData } from './data/mode.js';
-import './data/session.js';
+import './main.js';
 
-installModeData({ gear });
+installModeData({ mode: 'classic', gear, session });

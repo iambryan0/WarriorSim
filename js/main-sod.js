@@ -1,9 +1,8 @@
 // Entry for index.html (Season of Discovery).
-import './main.js';
 import { gear } from './data/gear_sod.js';
 import { runes } from './data/runes.js';
+import { session } from './data/session_sod.js';
 import { installModeData } from './data/mode.js';
-import './data/session_sod.js';
-import './data/presets.js';
+import './main.js';
 
-installModeData({ gear, runes });
+installModeData({ mode: 'sod', gear, runes, session });

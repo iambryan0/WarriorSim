@@ -1,4 +1,5 @@
-var SIM = SIM || {}
+import { SIM } from './sim-ns.js';
+import { spells } from './data/spells.js';
 
 SIM.STATS = {
 

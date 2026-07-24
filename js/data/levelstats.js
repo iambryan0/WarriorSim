@@ -480,6 +480,3 @@ export const levelstats = [
     "8,1,58,116,79,107,26,45",
     "8,1,59,119,81,109,26,45",
     "8,1,60,121,82,111,26,46"];
-// Interim ESM-migration shim: classic scripts still reference these by bare
-// global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { levelstats });

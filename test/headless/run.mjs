@@ -1,5 +1,5 @@
-// Headless parity runner: executes one fixture through the unmodified engine
-// exactly the way js/sim-worker.js does (updateGlobals -> new Player -> new
+// Headless parity runner: executes one fixture through the engine exactly
+// the way js/sim-worker.js does (updateGlobals -> new Player -> new
 // Simulation -> startSync) and prints a deterministic JSON report.
 //
 //   node test/headless/run.mjs --fixture test/fixtures/thbwl.json [--seed 42]
@@ -8,8 +8,7 @@
 // The seed defaults to the fixture's embedded seed. starttime/endtime are
 // wall-clock and deliberately excluded from the output.
 import fs from 'node:fs';
-import vm from 'node:vm';
-import { createEngineContext, seedContext } from './sandbox.mjs';
+import { loadEngine, hostConsole } from './sandbox.mjs';
 
 function arg(name, fallback) {
     const i = process.argv.indexOf('--' + name);
@@ -18,7 +17,7 @@ function arg(name, fallback) {
 
 const fixturePath = arg('fixture');
 if (!fixturePath) {
-    console.error('usage: node test/headless/run.mjs --fixture <file> [--seed N] [--out <file>] [--trace N]');
+    hostConsole.error('usage: node test/headless/run.mjs --fixture <file> [--seed N] [--out <file>] [--trace N]');
     process.exit(2);
 }
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
@@ -26,24 +25,17 @@ const seed = parseInt(arg('seed', fixture.seed ?? 42), 10);
 const traceLimit = parseInt(arg('trace', 400), 10);
 
 const trace = [];
-const ctx = await createEngineContext({ sod: fixture.globals.sod !== false, trace });
-seedContext(ctx, seed);
+const { RNG, updateGlobals, Player, Simulation } = await loadEngine({ sod: fixture.globals.sod !== false, trace });
+RNG.seed(seed);
 
-ctx.__globals = fixture.globals;
-ctx.__playerConfig = fixture.playerConfig;
-ctx.__simConfig = fixture.simConfig;
-const { report, spread } = vm.runInContext(`
-    (() => {
-        updateGlobals(__globals);
-        const player = new Player(undefined, undefined, undefined, __playerConfig);
-        if (!player.mh) throw new Error('fixture selects no weapon');
-        let report = null;
-        const sim = new Simulation(player, (r) => { report = r; }, null, __simConfig);
-        sim.startSync();
-        report.player = player.serializeStats();
-        return { report, spread: sim.spread };
-    })()
-`, ctx, { filename: 'headless-driver' });
+updateGlobals(fixture.globals);
+const player = new Player(undefined, undefined, undefined, fixture.playerConfig);
+if (!player.mh) throw new Error('fixture selects no weapon');
+let report = null;
+const sim = new Simulation(player, (r) => { report = r; }, null, fixture.simConfig);
+sim.startSync();
+report.player = player.serializeStats();
+const spread = sim.spread;
 
 function sortedByKey(obj, pick) {
     const out = {};
@@ -85,7 +77,7 @@ const json = JSON.stringify(golden, null, 2) + '\n';
 const out = arg('out');
 if (out) {
     fs.writeFileSync(out, json);
-    console.error(`wrote ${out} (${golden.iterations} iterations, mean dps ${golden.meandps.toFixed(2)})`);
+    hostConsole.error(`wrote ${out} (${golden.iterations} iterations, mean dps ${golden.meandps.toFixed(2)})`);
 } else {
     process.stdout.write(json);
 }

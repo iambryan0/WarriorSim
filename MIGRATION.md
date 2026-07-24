@@ -6,6 +6,34 @@ questions.
 
 ## Phase 1 — Vite + TypeScript migration
 
+### UI to ES modules, fully bundled site (branch `phase1/esm-ui`)
+- ui.js/settings.js/stats.js/profiles.js are ES modules importing the engine
+  and data explicitly; the shared `SIM` namespace lives in `js/sim-ns.js`
+  (module version of the old `var SIM = SIM || {}` pattern, so internal
+  SIM.X.Y cross-references stay untouched). The pages' inline
+  `$(document).ready(init)` block and `var mode` scripts moved into the
+  entries; `js/data/mode.js` now also carries `mode` and `session`.
+  jQuery/tablesorter/Chart remain vendored classic scripts in `public/libs`.
+- Every interim globalThis shim is gone — the dependency graph is imports
+  only. The `copy-legacy-js` plugin is gone; `npm run build` fully bundles
+  both pages and the worker (worker spawned via
+  `new Worker(new URL('../sim-worker.js', import.meta.url), {type:'module'})`
+  so Vite's worker pipeline picks it up).
+- Worker protocol gained an optional `seed` field (RNG.seed before the run;
+  UI never sends it — production behavior unchanged). Used by the bundle
+  parity check now and by the Phase 3 Rust/WASM validation later.
+- Parity harness is plain native ESM now: sandbox.mjs imports the engine
+  directly (no vm, no --experimental-vm-modules), fresh process per fixture.
+  check-bundle.mjs drives the MINIFIED worker chunk through the real message
+  protocol and matches the golden exactly. That check caught keepNames not
+  propagating to Vite's separate worker build — fixed via
+  `worker.rollupOptions.output.keepNames`.
+- Bundle sizes: sod chunk ~1.0 MB min (~170 KB gz; dominated by the 78k-line
+  gear_sod table), worker ~1.1 MB (inlines both mode tables — code-splitting
+  candidate for later, not correctness). Chunk-size warning is expected.
+- Verified: 11/11 goldens byte-identical; bundle check exact via worker
+  protocol; asset sweep on the built pages all-200.
+
 ### Engine to ES modules (branch `phase1/esm-engine`)
 - All engine-loaded files are now real ES modules with explicit imports:
   `rng.js`, every `js/data/*`, the four `js/classes/*`, `js/globals.js`.
