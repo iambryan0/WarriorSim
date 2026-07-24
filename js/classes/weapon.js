@@ -71,7 +71,7 @@ class Weapon {
             // custom spells
             if (item.proc.spell) {
                 if (!player.auras[item.proc.spell.toLowerCase()]) {
-                    player.auras[item.proc.spell.toLowerCase()] = eval('new ' + item.proc.spell + '(player)');
+                    player.auras[item.proc.spell.toLowerCase()] = createSpell(item.proc.spell, player);
                 }
                 this.proc1.spell = player.auras[item.proc.spell.toLowerCase()];
             }

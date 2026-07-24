@@ -3009,3 +3009,31 @@ class ObsidianHaste extends Aura {
         this.name = 'Obsidian Haste';
     }
 }
+// Explicit lookup replacing the old eval('new ' + name + '(...)') pattern.
+// Every class a data file can name — item/enchant proc `spell`, set-bonus
+// `procspell`, rotation `classname` — must be listed here. eval coupled class
+// names to runtime strings invisibly and breaks under minified module builds.
+var SPELL_CLASSES = {
+    Annihilator, Avenger, BattleShout, BerserkerRage, Berserking,
+    BlademasterFury, BlisteringRagehammer, BloodFury, Bloodrage, Bloodthirst,
+    Bonereaver, Cleave, CleaveArmor, Cloudkeeper, CoinFlip, ConsumedRage,
+    Crusader, DeathWish, DemonTaintedBlood, Destiny, Earthstrike,
+    EchoesDread, Empyrean, Eskhandar, Execute, Felstriker, Fireball, Flask,
+    Gabbar, GneuroLogical, GrilekFury, GrilekGuard, GunAxe,
+    GyromaticAcceleration, Hamstring, HeroicStrike, Jackhammer, JujuFlurry,
+    LordGeneral, MagmadarsReturn, MeltArmor, MightyRagePotion,
+    MildlyIrradiated, MoonstalkerFury, MortalStrike, Overpower,
+    PrimalBlessing, PrimalBlessing2, Pummeler, QuickStrike, RagePotion,
+    Ragehammer, RagingBlow, Rampage, Recklessness, RelentlessStrength, Rend,
+    Rivenspike, RoarGuardian, SerpentAscension, ShieldSlam, Shockwave, Slam,
+    Slayer, Spicy, Spider, Stoneslayer, StrengthChampion, SunderArmor,
+    Swarmguard, ThunderClap, Ultrasonic, UnstoppableMight, Untamed,
+    Vibroblade, VictoryRush, VoidMadness, WarriorsResolve, Whirlwind,
+    WrathWray, Zandalarian, Zeal,
+};
+
+function createSpell(name, player, id) {
+    const cls = SPELL_CLASSES[name];
+    if (!cls) throw new Error('unknown spell class: ' + name);
+    return new cls(player, id);
+}
