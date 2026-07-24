@@ -27,28 +27,28 @@
         opacity: 0.1;
         pointer-events: none;
         &[data-race="Human"] {
-            background-image: url(../img/human.png);
+            background-image: url(/img/human.png);
         }
         &[data-race="Gnome"] {
-            background-image: url(../img/gnome.png);
+            background-image: url(/img/gnome.png);
         }
         &[data-race="Dwarf"] {
-            background-image: url(../img/dwarf.png);
+            background-image: url(/img/dwarf.png);
         }
         &[data-race="Night Elf"] {
-            background-image: url(../img/nightelf.png);
+            background-image: url(/img/nightelf.png);
         }
         &[data-race="Orc"] {
-            background-image: url(../img/orc.png);
+            background-image: url(/img/orc.png);
         }
         &[data-race="Undead"] {
-            background-image: url(../img/undead.png);
+            background-image: url(/img/undead.png);
         }
         &[data-race="Tauren"] {
-            background-image: url(../img/tauren.png);
+            background-image: url(/img/tauren.png);
         }
         &[data-race="Troll"] {
-            background-image: url(../img/troll.png);
+            background-image: url(/img/troll.png);
         }
     }
 

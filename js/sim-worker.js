@@ -1,21 +1,21 @@
 importScripts(
-    './rng.min.js',
-    './data/buffs.min.js',
-    './data/enchants.min.js',
-    './data/levelstats.min.js',
-    './data/spells.min.js',
-    './data/talents.min.js',
-    './classes/player.min.js',
-    './classes/simulation.min.js',
-    './classes/spell.min.js',
-    './classes/weapon.min.js',
-    './globals.min.js',
+    './rng.js',
+    './data/buffs.js',
+    './data/enchants.js',
+    './data/levelstats.js',
+    './data/spells.js',
+    './data/talents.js',
+    './classes/player.js',
+    './classes/simulation.js',
+    './classes/spell.js',
+    './classes/weapon.js',
+    './globals.js',
 );
 
 onmessage = (event) => {
     const params = event.data;
-    if (params.globals.sod) importScripts('./data/gear_sod.min.js','./data/runes.min.js');
-    else importScripts('./data/gear.min.js');
+    if (params.globals.sod) importScripts('./data/gear_sod.js','./data/runes.js');
+    else importScripts('./data/gear.js');
     updateGlobals(params.globals);
     const player = new Player(...params.player);
     const sim = new Simulation(player, (report) => {
