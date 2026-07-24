@@ -1,4 +1,6 @@
-export const gear: any = {
+import type { Item } from './schemas.ts';
+
+export const gear: Record<string, Item[]> = {
   "head": [
     {
       "name": "Dark Iron Helm",

@@ -1,0 +1,9 @@
+[
+    {
+        "table": "buffs",
+        "id": 455864,
+        "name": "Faerie Fire Hit",
+        "path": "armor",
+        "issue": "Invalid input: expected number, received boolean"
+    }
+]

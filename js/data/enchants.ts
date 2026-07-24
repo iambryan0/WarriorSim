@@ -1,4 +1,6 @@
-export const enchant: any = {
+import type { Enchant, ItemSet } from './schemas.ts';
+
+export const enchant: Record<string, Enchant[]> = {
    "mainhand": [
      {
        "id": 211845,
@@ -964,7 +966,7 @@ export const enchant: any = {
      }
    ]
  };
-export const sets: any[] = [
+export const sets: ItemSet[] = [
    {
       id: 143,
       name: 'Devilsaur Armor',

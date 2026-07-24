@@ -1,3 +1,6 @@
+// Stays any[] (not Buff[]) until the 455864 "Faerie Fire Hit" armor:true
+// anomaly is resolved — see NOTES.md and test/data-anomalies.json; typing the
+// table would turn that tracked data bug into a compile error.
 export const buffs: any[] = [
    {
       id: 2457,

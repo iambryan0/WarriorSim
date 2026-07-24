@@ -1,4 +1,7 @@
-export const talents: any[] = [
+import type { TalentTree } from './schemas.ts';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const talents: TalentTree[] = [
    {
       n: 'Arms',
       t: [
