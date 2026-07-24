@@ -13,7 +13,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { createEngineContext, ROOT } from './sandbox.mjs';
 
-const ctx = createEngineContext({ sod: true, extraScripts: ['js/data/session_sod.js'] });
+const ctx = await createEngineContext({ sod: true, extraScripts: ['js/data/session_sod.js'] });
 const session = JSON.parse(vm.runInContext('JSON.stringify(session)', ctx));
 const spellsData = JSON.parse(vm.runInContext('JSON.stringify(spells)', ctx));
 

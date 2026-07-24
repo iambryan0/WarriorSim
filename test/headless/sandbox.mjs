@@ -2,10 +2,21 @@
 // and order of js/sim-worker.js. Randomness is made deterministic through the
 // engine's own injection point: RNG.seed() (js/rng.js), which swaps
 // RNG.random from its Math.random default to seeded mulberry32.
+//
+// During the ESM migration the engine is a mix of classic scripts and ES
+// modules. Classic files run via vm.runInContext (script semantics: top-level
+// class/let/const become the context's shared global lexical bindings, exactly
+// like ordered <script> tags). Converted files (listed in ESM below) run as
+// real modules in the SAME context via vm.SourceTextModule, so both worlds
+// share one realm — a module's globalThis shims are visible to classic files
+// and vice versa. vm.SourceTextModule needs node --experimental-vm-modules;
+// check.mjs passes the flag when spawning, add it yourself for direct
+// run.mjs/capture-fixtures.mjs invocations (only needed once ESM is
+// non-empty).
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -26,9 +37,12 @@ export const ENGINE_SCRIPTS = [
 export const SOD_DATA = ['js/data/gear_sod.js', 'js/data/runes.js'];
 export const CLASSIC_DATA = ['js/data/gear.js'];
 
+// Repo-relative paths of files already converted to ES modules.
+export const ESM = new Set([]);
+
 // trace: optional array that collects console.log first-arguments (the
 // engine's /* start-log */ event log when player config has logging: true).
-export function createEngineContext({ sod = true, trace = null, extraScripts = [] } = {}) {
+export async function createEngineContext({ sod = true, trace = null, extraScripts = [] } = {}) {
     const sandbox = {
         console: {
             log: (...args) => { if (trace) trace.push(String(args[0])); },
@@ -37,9 +51,40 @@ export function createEngineContext({ sod = true, trace = null, extraScripts = [
         },
     };
     const ctx = vm.createContext(sandbox);
+
+    if (ESM.size && typeof vm.SourceTextModule !== 'function') {
+        throw new Error('ES-module engine files need node --experimental-vm-modules');
+    }
+    const moduleCache = new Map();
+    function loadModule(absPath) {
+        const key = pathToFileURL(absPath).href;
+        let mod = moduleCache.get(key);
+        if (!mod) {
+            mod = new vm.SourceTextModule(fs.readFileSync(absPath, 'utf8'), {
+                context: ctx,
+                identifier: key,
+                initializeImportMeta: (meta) => { meta.url = key; },
+                importModuleDynamically: (specifier, referencing) => evalModule(resolve(specifier, referencing)),
+            });
+            moduleCache.set(key, mod);
+        }
+        return mod;
+    }
+    const resolve = (specifier, referencing) =>
+        path.resolve(path.dirname(fileURLToPath(referencing.identifier)), specifier);
+    const linker = (specifier, referencing) => loadModule(resolve(specifier, referencing));
+    async function evalModule(absPath) {
+        const mod = loadModule(absPath);
+        if (mod.status === 'unlinked') await mod.link(linker);
+        if (mod.status === 'linked') await mod.evaluate();
+        return mod;
+    }
+
     const scripts = [...ENGINE_SCRIPTS, ...(sod ? SOD_DATA : CLASSIC_DATA), ...extraScripts];
     for (const rel of scripts) {
-        vm.runInContext(fs.readFileSync(path.join(ROOT, rel), 'utf8'), ctx, { filename: rel });
+        const abs = path.join(ROOT, rel);
+        if (ESM.has(rel)) await evalModule(abs);
+        else vm.runInContext(fs.readFileSync(abs, 'utf8'), ctx, { filename: rel });
     }
     return ctx;
 }
