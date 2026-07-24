@@ -88,4 +88,21 @@ candidates only.
 
 ## Performance baselines
 
-_(Phase 2: Node --cpu-prof on the headless runner; the number Rust must beat)_
+The numbers the Rust engine must beat (PROMPT.MD Phase 3 step 6). Measured
+2026-07-24 with `test/headless/bench.mjs` (seeded, logging off, best of 3),
+Node v24.18.0 on a QEMU virtual CPU — re-baseline on real hardware before
+drawing Rust comparisons, but relative shape is what matters:
+
+| fixture (workload)                         | iterations/sec |
+| ------------------------------------------ | -------------- |
+| thbwl (2H, 50–60s fights)                  | ~3,450         |
+| dwbwl (dual-wield, 50–60s — heaviest)      | ~995           |
+| thbwl-long-startrage (2H, 120–180s fights) | ~1,440         |
+
+CPU profile (dwbwl, `node --cpu-prof`): `Simulation.run` 22% self time
+(next-event loop bookkeeping), `startSync` 9%, then `Player.cast` ~5%,
+`stepauras` ~9% across inlinings, `attackmh/oh` ~8%, `updateDmgMod` ~5%,
+aura `canUse/step/use` ~6%. No single dominant hotspot — the loop itself and
+per-event aura bookkeeping spread the cost, which is the expected profile
+for the Rust port to attack structurally (flat arrays over dict-keyed aura
+maps) rather than micro-optimizing JS.
