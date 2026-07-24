@@ -126,6 +126,3 @@ export function updateGlobals(params) {
     delete gear["custom"];
 }
 
-// Interim ESM-migration shim: classic scripts (ui.js) still reference these
-// by bare global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { getGlobalsDelta, updateGlobals });

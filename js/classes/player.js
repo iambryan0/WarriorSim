@@ -1779,6 +1779,3 @@ export class Player {
     }
 }
 
-// Interim ESM-migration shim: classic scripts (ui.js) still reference Player
-// by bare global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { Player });

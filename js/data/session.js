@@ -2202,6 +2202,3 @@ export const session = {
     },
     "profilename": "Default"
 }
-// Interim ESM-migration shim: classic scripts still reference these by bare
-// global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { session });

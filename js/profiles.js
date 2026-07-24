@@ -1,4 +1,10 @@
-var SIM = SIM || {}
+import { SIM } from './sim-ns.js';
+import { mode, gear, runes } from './data/mode.js';
+import { enchant } from './data/enchants.js';
+import { buffs } from './data/buffs.js';
+import { spells } from './data/spells.js';
+import { talents } from './data/talents.js';
+import { preset_thbwl, preset_dwbwl, preset_thaq, preset_dwaq } from './data/presets.js';
 
 SIM.PROFILES = {
 

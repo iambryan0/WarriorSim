@@ -1,17 +1,18 @@
-// Shared Vite entry: stylesheet, engine modules, and the mode-independent
-// data tables. Mode-specific data is installed by the per-page entries
-// main-sod.js / main-classic.js. The UI files (ui.js, settings.js,
-// profiles.js, stats.js) are still ordered classic <script> tags and reach
-// the engine through its interim globalThis shims (see MIGRATION.md).
+// Shared Vite entry: stylesheet, UI modules (which pull the whole engine
+// through their imports), and the page bootstrap that the old inline
+// $(document).ready() script tag used to do. jQuery, tablesorter and Chart
+// remain vendored classic scripts in public/libs — they run before any
+// module and are reached as globals.
 import '../scss/style.scss';
-import './rng.js';
-import './data/buffs.js';
-import './data/enchants.js';
-import './data/levelstats.js';
-import './data/spells.js';
-import './data/talents.js';
-import './classes/simulation.js';
-import './classes/spell.js';
-import './classes/weapon.js';
-import './classes/player.js';
-import './globals.js';
+import { SIM } from './sim-ns.js';
+import './ui.js';
+import './settings.js';
+import './stats.js';
+import './profiles.js';
+
+$(document).ready(function () {
+    SIM.UI.init();
+    SIM.SETTINGS.init();
+    SIM.STATS.init();
+    SIM.PROFILES.init();
+});
