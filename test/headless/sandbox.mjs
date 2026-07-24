@@ -45,12 +45,18 @@ export const ESM = new Set([
     'js/data/gear.js',
     'js/data/gear_sod.js',
     'js/data/levelstats.js',
+    'js/data/mode.js',
     'js/data/presets.js',
     'js/data/runes.js',
     'js/data/session.js',
     'js/data/session_sod.js',
     'js/data/spells.js',
     'js/data/talents.js',
+    'js/classes/player.js',
+    'js/classes/simulation.js',
+    'js/classes/spell.js',
+    'js/classes/weapon.js',
+    'js/globals.js',
 ]);
 
 // trace: optional array that collects console.log first-arguments (the
@@ -99,6 +105,24 @@ export async function createEngineContext({ sod = true, trace = null, extraScrip
         if (ESM.has(rel)) await evalModule(abs);
         else vm.runInContext(fs.readFileSync(abs, 'utf8'), ctx, { filename: rel });
     }
+
+    // Synthetic entry mirroring main-sod.js / main-classic.js: install the
+    // mode-specific tables the engine imports from js/data/mode.js.
+    const installSrc = sod
+        ? "import { gear } from './data/gear_sod.js';\n" +
+          "import { runes } from './data/runes.js';\n" +
+          "import { installModeData } from './data/mode.js';\n" +
+          'installModeData({ gear, runes });\n'
+        : "import { gear } from './data/gear.js';\n" +
+          "import { installModeData } from './data/mode.js';\n" +
+          'installModeData({ gear });\n';
+    const entry = new vm.SourceTextModule(installSrc, {
+        context: ctx,
+        identifier: pathToFileURL(path.join(ROOT, 'js/__install-mode__.mjs')).href,
+        importModuleDynamically: (specifier, referencing) => evalModule(resolve(specifier, referencing)),
+    });
+    await entry.link(linker);
+    await entry.evaluate();
     return ctx;
 }
 

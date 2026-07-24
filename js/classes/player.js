@@ -1,4 +1,27 @@
-class Player {
+import { RNG } from '../rng.js';
+import { rng, rng10k, step, RESULT, DEFENSETYPE, SCHOOL } from './simulation.js';
+import { Weapon, WEAPONTYPE } from './weapon.js';
+import {
+    createSpell,
+    // direct aura/stance instantiations
+    BattleForecast, BattleStance, BerserkerRageAura, BerserkerStance,
+    BloodrageAura, DeepWounds, DefendersResolve, DefensiveStance, DefForecast,
+    EchoesBattle, EchoesDef, EchoesGlad, EchoesZerk, Flurry, FreshMeat,
+    GladForecast, GladiatorStance, ObsidianHaste, ObsidianStrength,
+    OldDeepWounds, SingleMinded, StanceSwitch, SuddenDeath, TheMoltenCore,
+    VoodooFrenzy, WreckingCrew, ZerkForecast,
+    // instanceof checks
+    Bloodthirst, Cleave, Execute, HeroicStrike, MortalStrike, Overpower,
+    QuickStrike, ShieldSlam, Slam, SunderArmor, ThunderClap, Whirlwind,
+} from './spell.js';
+import { gear, runes } from '../data/mode.js';
+import { buffs } from '../data/buffs.js';
+import { enchant, sets } from '../data/enchants.js';
+import { levelstats } from '../data/levelstats.js';
+import { spells } from '../data/spells.js';
+import { talents } from '../data/talents.js';
+
+export class Player {
     static getConfig(base) {
         return {
             level: $('input[name="level"]').val(),
@@ -1755,3 +1778,7 @@ class Player {
             (this.auras.berserkerrage && this.auras.berserkerrage.timer);
     }
 }
+
+// Interim ESM-migration shim: classic scripts (ui.js) still reference Player
+// by bare global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { Player });

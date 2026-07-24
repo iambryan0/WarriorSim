@@ -1,4 +1,10 @@
-function getGlobalsDelta() {
+import { gear, runes } from './data/mode.js';
+import { buffs } from './data/buffs.js';
+import { enchant } from './data/enchants.js';
+import { spells } from './data/spells.js';
+import { talents } from './data/talents.js';
+
+export function getGlobalsDelta() {
     const _gear = {};
     for (const type in gear) {
         if (type == 'custom') continue;
@@ -51,7 +57,7 @@ function getGlobalsDelta() {
     }
 }
 
-function updateGlobals(params) {
+export function updateGlobals(params) {
     for (let tree in params.talents)
         for (let talent in params.talents[tree].t)
             talents[tree].t[talent].c = params.talents[tree].t[talent];
@@ -119,3 +125,7 @@ function updateGlobals(params) {
 
     delete gear["custom"];
 }
+
+// Interim ESM-migration shim: classic scripts (ui.js) still reference these
+// by bare global name; removed once every consumer imports explicitly.
+Object.assign(globalThis, { getGlobalsDelta, updateGlobals });

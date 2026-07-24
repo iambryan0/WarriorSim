@@ -78415,6 +78415,3 @@ export const gear = {
     }
   ]
 };
-// Interim ESM-migration shim: classic scripts still reference these by bare
-// global name; removed once every consumer imports explicitly.
-Object.assign(globalThis, { gear });
