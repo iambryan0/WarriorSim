@@ -297,7 +297,7 @@ export class Simulation {
         }
 
         // prepull actions
-        let prepull = [];
+        let prepull: any[] = [];
         for (let aura of Object.values(player.auras) as any[]) {
             if (aura.usestep < 0) prepull.push(aura);
         }

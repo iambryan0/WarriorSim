@@ -20,11 +20,12 @@ export interface PlayerConfig {
     /** String in storage; the engine relies on loose numeric coercion. */
     level: number | string;
     race: string;
+    /** 'sod' | 'classic'; can be undefined on the DOM path before mode.ts installs. */
     aqbooks: boolean;
     reactionmin: number;
     reactionmax: number;
     adjacent: number;
-    mode: string;
+    mode: string | undefined;
     spellqueueing: boolean;
     logging?: boolean;
     target: TargetConfig;

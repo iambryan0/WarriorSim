@@ -80,6 +80,8 @@ export class Player {
             },
         };
     }
+    declare mh: Weapon;
+    declare oh: Weapon | undefined;
     constructor(testItem?: any, testType?: any, enchtype?: any, config?: PlayerConfig) {
         if (!config) config = Player.getConfig();
         this.rage = 0;
@@ -292,7 +294,7 @@ export class Player {
                 ) {
                     for (let prop in this.base) {
                         if (prop == 'haste') {
-                            this.base.haste *= 1 + item.haste / 100 || 1;
+                            this.base.haste *= 1 + (item.haste ?? 0) / 100 || 1;
                         } else {
                             if (typeof (item as any)[prop] === 'object') {
                                 for (let subprop in (item as any)[prop]) {
@@ -398,7 +400,7 @@ export class Player {
                 ) {
                     for (let prop in this.base) {
                         if (prop == 'haste') {
-                            this.base.haste *= 1 + item.haste / 100 || 1;
+                            this.base.haste *= 1 + (item.haste ?? 0) / 100 || 1;
                         } else {
                             if (typeof (item as any)[prop] === 'object') {
                                 for (let subprop in (item as any)[prop]) {
@@ -426,7 +428,7 @@ export class Player {
                 ) {
                     for (let prop in this.base) {
                         if (prop == 'haste') {
-                            this.base.haste *= 1 + item.haste / 100 || 1;
+                            this.base.haste *= 1 + (item.haste ?? 0) / 100 || 1;
                         } else {
                             if (typeof (item as any)[prop] === 'object') {
                                 for (let subprop in (item as any)[prop]) {
@@ -1081,7 +1083,7 @@ export class Player {
         let r = this.target.armor / (this.target.armor + 400 + 85 * this.level);
         return r > 0.75 ? 0.75 : r;
     }
-    addRage(dmg: number, result: number, weapon: Weapon, spell: Spell | null) {
+    addRage(dmg: number, result: number, weapon: Weapon | undefined, spell: Spell | null | undefined) {
         let oldRage = this.rage;
         if (!spell || spell instanceof HeroicStrike || spell instanceof Cleave) {
             if (
@@ -1101,7 +1103,7 @@ export class Player {
             }
         } else {
             if (result == RESULT.DODGE) {
-                this.rage += (weapon.avgdmg() / this.rageconversion) * 7.5 * 0.75;
+                this.rage += (weapon!.avgdmg() / this.rageconversion) * 7.5 * 0.75;
             } else if (result != RESULT.MISS) {
                 this.rage += (dmg / this.rageconversion) * 7.5 * this.ragemod;
             }
@@ -1382,7 +1384,7 @@ export class Player {
         if (roll < tmp && !spell.nocrit) return RESULT.CRIT;
         return RESULT.HIT;
     }
-    rollmagicspell(spell: Spell | null) {
+    rollmagicspell(spell: any) {
         let miss = this.target.misschance;
         if (spell.binaryspell) miss = this.target.binaryresist;
 
@@ -1393,7 +1395,7 @@ export class Player {
     attackmh(weapon: Weapon, adjacent: any, damageSoFar: any) {
         this.stepauras();
 
-        let spell = null;
+        let spell: any = null;
         let procdmg = 0;
         let result;
 
@@ -1535,11 +1537,11 @@ export class Player {
         return done + procdmg;
     }
     castoh(spell: Spell, adjacent: any, damageSoFar: any) {
-        let dmg = spell.dmg(this.oh) * this.oh.modifier;
+        let dmg = spell.dmg(this.oh) * this.oh!.modifier;
         if (dmg) dmg += this.stats.moddmgtaken;
         let result = this.rollmeleespell(spell, this.oh);
 
-        let procdmg = this.procattack(spell, this.oh, result, adjacent, damageSoFar);
+        let procdmg = this.procattack(spell, this.oh!, result, adjacent, damageSoFar);
         if (result == RESULT.MISS) {
             spell.failed();
         } else if (result == RESULT.DODGE) {
@@ -1554,7 +1556,7 @@ export class Player {
         let done = this.dealdamage(dmg, result, this.oh, spell, adjacent);
         spell.totaldmg += done;
         spell.offhandhit = false;
-        this.oh.totalprocdmg += procdmg;
+        this.oh!.totalprocdmg += procdmg;
         /* start-log */ if (this.logging)
             this.log(
                 `${spell.name} (OH) for ${~~done} (${Object.keys(RESULT)[result]})${adjacent ? ' (Adjacent)' : ''}.`,
@@ -1811,7 +1813,7 @@ export class Player {
     magicproc(proc: ProcDef) {
         let mod = 1;
         let miss = this.target.misschance;
-        let dmg = proc.magicdmg;
+        let dmg = proc.magicdmg as number;
         if (proc.binaryspell) miss = this.target.binaryresist;
         else mod *= this.target.mitigation;
         if (rng10k() < miss) return 0;
