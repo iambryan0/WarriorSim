@@ -27,5 +27,8 @@
         "vitest": "^4.1.10"
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "zod": "^4.4.3"
+    }
 }

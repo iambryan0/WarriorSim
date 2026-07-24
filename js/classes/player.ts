@@ -294,13 +294,13 @@ export class Player {
                         if (prop == 'haste') {
                             this.base.haste *= 1 + item.haste / 100 || 1;
                         } else {
-                            if (typeof item[prop] === 'object') {
-                                for (let subprop in item[prop]) {
-                                    this.base[prop][subprop] += item[prop][subprop] || 0;
+                            if (typeof (item as any)[prop] === 'object') {
+                                for (let subprop in (item as any)[prop]) {
+                                    this.base[prop][subprop] += (item as any)[prop][subprop] || 0;
                                 }
                             } else {
-                                if (item[prop]) {
-                                    this.base[prop] += item[prop] || 0;
+                                if ((item as any)[prop]) {
+                                    this.base[prop] += (item as any)[prop] || 0;
                                 }
                             }
                         }
@@ -400,13 +400,13 @@ export class Player {
                         if (prop == 'haste') {
                             this.base.haste *= 1 + item.haste / 100 || 1;
                         } else {
-                            if (typeof item[prop] === 'object') {
-                                for (let subprop in item[prop]) {
-                                    this.base[prop][subprop] += item[prop][subprop] || 0;
+                            if (typeof (item as any)[prop] === 'object') {
+                                for (let subprop in (item as any)[prop]) {
+                                    this.base[prop][subprop] += (item as any)[prop][subprop] || 0;
                                 }
                             } else {
-                                if (item[prop]) {
-                                    this.base[prop] += item[prop] || 0;
+                                if ((item as any)[prop]) {
+                                    this.base[prop] += (item as any)[prop] || 0;
                                 }
                             }
                         }
@@ -428,13 +428,13 @@ export class Player {
                         if (prop == 'haste') {
                             this.base.haste *= 1 + item.haste / 100 || 1;
                         } else {
-                            if (typeof item[prop] === 'object') {
-                                for (let subprop in item[prop]) {
-                                    this.base[prop][subprop] += item[prop][subprop] || 0;
+                            if (typeof (item as any)[prop] === 'object') {
+                                for (let subprop in (item as any)[prop]) {
+                                    this.base[prop][subprop] += (item as any)[prop][subprop] || 0;
                                 }
                             } else {
-                                if (item[prop]) {
-                                    this.base[prop] += item[prop] || 0;
+                                if ((item as any)[prop]) {
+                                    this.base[prop] += (item as any)[prop] || 0;
                                 }
                             }
                         }

@@ -894,7 +894,7 @@ SIM.SETTINGS = {
     getTalentTotal: function (div) {
         let tree = div.parents('table').index() - 1;
         let count = 0;
-        for (let talent of talents[tree - 1].t) count += parseInt(talent.c);
+        for (let talent of talents[tree - 1].t) count += parseInt(talent.c as any);
         return count;
     },
 };

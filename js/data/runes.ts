@@ -1,4 +1,6 @@
-export const runes: any = {
+import type { Rune } from './schemas.ts';
+
+export const runes: Record<string, Rune[]> = {
    "chest": [
       {
          id: 402877,

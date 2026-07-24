@@ -1,4 +1,6 @@
-export const gear: any = {
+import type { Item } from './schemas.ts';
+
+export const gear: Record<string, Item[]> = {
   "head": [
     {
       "id": 1280,
@@ -27017,7 +27019,7 @@ export const gear: any = {
       "slot": "waist",
       "r": 19,
       "q": "3",
-      "i": 30,
+      "i": "30",
       "name": "Cobrahn's Grasp",
       "p": "inv_belt_03",
       "agi": 3,
@@ -46874,7 +46876,7 @@ export const gear: any = {
       "slot": "trinket",
       "r": 46,
       "q": "2",
-      "i": 60,
+      "i": "60",
       "name": "Rune of the Guard Captain",
       "p": "inv_misc_rune_07",
       "ap": 20,
@@ -46953,7 +46955,7 @@ export const gear: any = {
       "slot": "trinket",
       "r": 25,
       "q": "3",
-      "i": 40,
+      "i": "40",
       "name": "Avenger's Void Pearl",
       "p": "inv_misc_gem_pearl_04",
       "resist": {
@@ -47390,7 +47392,7 @@ export const gear: any = {
       "slot": "trinket",
       "r": 46,
       "q": "2",
-      "i": 60,
+      "i": "60",
       "name": "Rune of the Guard Captain",
       "p": "inv_misc_rune_07",
       "ap": 20,
@@ -47469,7 +47471,7 @@ export const gear: any = {
       "slot": "trinket",
       "r": 25,
       "q": "3",
-      "i": 40,
+      "i": "40",
       "name": "Avenger's Void Pearl",
       "p": "inv_misc_gem_pearl_04",
       "resist": {
@@ -48601,7 +48603,7 @@ export const gear: any = {
       "slot": "ranged",
       "r": 25,
       "q": "3",
-      "i": 40,
+      "i": "40",
       "name": "Naga Heartrender",
       "speed": 2.9,
       "mindmg": 30,

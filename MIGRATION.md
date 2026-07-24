@@ -4,9 +4,37 @@ Running log of the modernization (see `PROMPT.MD` for the plan). Newest first
 within each phase. Every entry: what changed, how it was verified, open
 questions.
 
+## Phase 2 — Data layer + engine hardening
+
+### Data-layer schemas and validation (branch `phase2/data-schemas`)
+
+- `js/data/schemas.ts` (Zod): Item, Buff, Enchant, ItemSet, Rune,
+  TalentTree, Proc, level-stats rows. Strict objects — unknown keys fail, so
+  field-name typos surface. `test/data.test.mjs` validates every entry of
+  every table; violations must match `test/data-anomalies.json` exactly
+  (new data bugs fail CI, stale allowlist entries too).
+- Data exports now carry `z.infer` types (type-only imports, nothing at
+  runtime): gear tables as `Record<string, Item[]>`, enchants, sets, runes,
+  talents, levelstats. Runtime mutation state the UI/engine stamp onto
+  entries (`selected`/`hidden`/`dps`, buff `active`) is modeled as a
+  type-level intersection so schemas keep describing pure data. `buffs`
+  stays `any[]` until the 455864 anomaly is resolved (typing it would turn
+  the tracked bug into a compile error). tsc cost of typing the 78k-line
+  gear table: negligible (~4s total).
+- Findings (full detail in NOTES.md): one real engine-impacting bug —
+  "Faerie Fire Hit" (455864) has `armor: true`, subtracting exactly 1 armor
+  via boolean coercion; left intact + allowlisted, correct value is a
+  game-data question. Fixed 4 unambiguous number-where-string ilvl typos in
+  gear_sod (UI-sort-only field; parity verified unchanged). Documented
+  conventions: numeric-string q/i/ench/proc timings, mixed-type `phase`,
+  pipe/letter-suffix item ids, CSV levelstats rows, dead `Mainhand` field.
+- Verified: vitest 32/32 (8 new data tests), both tsc projects clean,
+  eslint/prettier clean, parity 11/11 byte-identical, bundle check exact.
+
 ## Phase 1 — Vite + TypeScript migration
 
 ### Engine typing: noImplicitAny + core interfaces (branch `phase1/engine-types`)
+
 - `tsconfig.engine.json` (extends root, `noImplicitAny: true`) covers
   `classes/`, `rng`, `globals`, `sim-worker`, `data/mode`;
   `npm run typecheck` runs both projects. 448 implicit-any errors → 0.

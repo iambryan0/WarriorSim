@@ -9,6 +9,34 @@ fixed — see PROMPT.MD constraints), fork triage, performance baselines.
   results with `result.maxdps = Math.min(result.maxdps, data.maxdps)` —
   almost certainly should be `Math.max`. UI-side aggregation only; does not
   affect engine math. Candidate fix for Phase 1 with explicit approval.
+- **buffs 455864 "Faerie Fire Hit" has `armor: true`** (buffs.ts:1263). The
+  engine computes `target.basearmorbuffed -= buff.armor`, so `true` coerces
+  to 1 and the buff subtracts exactly 1 armor. Every other buff in the
+  Sunder/Expose/Faerie Fire family carries a real number (the era Faerie
+  Fire uses 505). The correct value here is a game-data question (SoD
+  "improved" FF?), so it is NOT fixed — tracked as the one allowlisted
+  schema violation in `test/data-anomalies.json`.
+
+## Data-layer findings (Phase 2 schema validation, 2026-07-24)
+
+Schemas: `js/data/schemas.ts`; gate: `test/data.test.mjs` (every entry in
+every table, new violations fail CI).
+
+- **Fixed (unambiguous number-where-string typos):** gear_sod ilvl `i`
+  values were bare numbers on 4 items — 6460 Cobrahn's Grasp, 19120 Rune of
+  the Guard Captain (×2 slots), 211449 Avenger's Void Pearl (×2 slots),
+  209563 Naga Heartrender — vs numeric strings on the other 5726 entries.
+  Mixed types missort the UI ilvl column; the engine never reads `i`, so
+  parity is unaffected (verified).
+- **Documented conventions (schema-accepted, not bugs):** quality `q`, ilvl
+  `i`, `ench`, proc `interval`/`duration` are numeric strings; `phase` mixes
+  number and numeric string freely (normalization candidate for codegen);
+  gear ids are number, `"itemid|suffixid"` (2406 random-suffix items), or
+  letter-suffixed variants (`"213319a"` = Machinist's Gloves modeled without
+  its AP proc); levelstats rows are raw CSV strings.
+- **Dead upstream field:** capitalized `Mainhand: true` on 26 classic
+  weapons — nothing in the engine or UI reads it (the live flag pattern is
+  lowercase `offhand`). Left in place to stay diffable against upstream.
 
 ## Toolchain
 
