@@ -20,7 +20,7 @@ export const talents: any[] = [
             y: 0,
             iconname: 'Ability_Rogue_Ambush',
             c: 0,
-            aura: function (count) { return { impheroicstrike: count } },
+            aura: function (count: number) { return { impheroicstrike: count } },
          },
          {
             i: 130,
@@ -44,7 +44,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'Ability_Parry',
-            aura: function (count) { return { parry: count } },
+            aura: function (count: number) { return { parry: count } },
          },
          {
             i: 127,
@@ -64,7 +64,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'Ability_Gouge',
-            aura: function (count) { return { rendmod: 5 + count * 10 } },
+            aura: function (count: number) { return { rendmod: 5 + count * 10 } },
          },
          {
             i: 126,
@@ -82,7 +82,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Ability_Warrior_Charge',
-            aura: function (count) { return { chargebonus: count * 3 } },
+            aura: function (count: number) { return { chargebonus: count * 3 } },
          },
          {
             i: 641,
@@ -106,7 +106,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Spell_Nature_EnchantArmor',
-            aura: function (count) { return { rageretained: count * 5 } },
+            aura: function (count: number) { return { rageretained: count * 5 } },
          },
          {
             i: 128,
@@ -126,7 +126,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Ability_ThunderClap',
-            aura: function (count) { return { impthunderclap: Math.pow(2, count - 1) } },
+            aura: function (count: number) { return { impthunderclap: Math.pow(2, count - 1) } },
          },
          {
             i: 131,
@@ -144,7 +144,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'INV_Sword_05',
-            aura: function (count) { return { overpowercrit: 25 * count } },
+            aura: function (count: number) { return { overpowercrit: 25 * count } },
          },
          {
             i: 137,
@@ -164,7 +164,7 @@ export const talents: any[] = [
             ],
             c: 0,
             iconname: 'Spell_Holy_BlessingOfStamina',
-            aura: function (count) { return { angermanagement: count } },
+            aura: function (count: number) { return { angermanagement: count } },
          },
          {
             i: 121,
@@ -189,7 +189,7 @@ export const talents: any[] = [
             c: 0,
             // enable: 23255,
             iconname: 'Ability_BackStab',
-            aura: function (count) { return { deepwounds: count * 0.2 } },
+            aura: function (count: number) { return { deepwounds: count * 0.2 } },
          },
          {
             i: 136,
@@ -213,7 +213,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'INV_Axe_09',
-            aura: function (count) { return { twomod: count * 0.01 } },
+            aura: function (count: number) { return { twomod: count * 0.01 } },
          },
          {
             i: 662,
@@ -235,7 +235,7 @@ export const talents: any[] = [
             ],
             c: 0,
             iconname: 'Ability_SearingArrow',
-            aura: function (count) { return { abilitiescrit: count * 0.1 } },
+            aura: function (count: number) { return { abilitiescrit: count * 0.1 } },
          },
          {
             i: 132,
@@ -259,7 +259,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'INV_Axe_06',
-            aura: function (count) { return { axecrit: count } },
+            aura: function (count: number) { return { axecrit: count } },
          },
          {
             i: 133,
@@ -275,7 +275,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_Rogue_SliceDice',
-            aura: function (count) { return { sweepingstrikes: count } },
+            aura: function (count: number) { return { sweepingstrikes: count } },
          },
          {
             i: 125,
@@ -299,7 +299,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'INV_Mace_01',
-            aura: function (count) { return { macestun: count == 5 ? 6 : count } },
+            aura: function (count: number) { return { macestun: count == 5 ? 6 : count } },
          },
          {
             i: 123,
@@ -323,7 +323,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'INV_Sword_27',
-            aura: function (count) { return { swordproc: count } },
+            aura: function (count: number) { return { swordproc: count } },
          },
          {
             i: 134,
@@ -347,7 +347,7 @@ export const talents: any[] = [
             y: 5,
             c: 0,
             iconname: 'INV_Weapon_Halbard_01',
-            aura: function (count) { return { polearmcrit: count } },
+            aura: function (count: number) { return { polearmcrit: count } },
          },
          {
             i: 129,
@@ -367,7 +367,7 @@ export const talents: any[] = [
             y: 5,
             c: 0,
             iconname: 'Ability_ShockWave',
-            aura: function (count) { return { imphamstring: count * 5 } },
+            aura: function (count: number) { return { imphamstring: count * 5 } },
          },
          {
             i: 135,
@@ -388,7 +388,7 @@ export const talents: any[] = [
             c: 0,
             iconname: 'Ability_Warrior_SavageBlow',
             enable: 'Mortal Strike',
-            aura: function (count) { return { mortalstrike: count } },
+            aura: function (count: number) { return { mortalstrike: count } },
          }
       ]
    },
@@ -417,7 +417,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'Spell_Nature_Purge',
-            aura: function (count) { return { boomingvoice: count } },
+            aura: function (count: number) { return { boomingvoice: count } },
          },
          {
             i: 157,
@@ -441,7 +441,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'Ability_Rogue_Eviscerate',
-            aura: function (count) { return { crit: count } }
+            aura: function (count: number) { return { crit: count } }
          },
          {
             i: 161,
@@ -465,7 +465,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Ability_Warrior_WarCry',
-            aura: function (count) { return { impdemoshout: count * 8 } },
+            aura: function (count: number) { return { impdemoshout: count * 8 } },
          },
          {
             i: 159,
@@ -489,7 +489,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Spell_Nature_StoneClawTotem',
-            aura: function (count) { return { umbridledwrath: count * 8 } },
+            aura: function (count: number) { return { umbridledwrath: count * 8 } },
          },
          {
             i: 166,
@@ -509,7 +509,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Ability_Warrior_Cleave',
-            aura: function (count) { return { cleavebonus: count * 40 } },
+            aura: function (count: number) { return { cleavebonus: count * 40 } },
          },
          {
             i: 160,
@@ -525,7 +525,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Spell_Shadow_DeathScream',
-            aura: function (count) { return { piercinghowl: count } },
+            aura: function (count: number) { return { piercinghowl: count } },
          },
          {
             i: 661,
@@ -545,7 +545,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Spell_Shadow_SummonImp',
-            aura: function (count) { return { bloodcraze: count } },
+            aura: function (count: number) { return { bloodcraze: count } },
          },
          {
             i: 154,
@@ -569,7 +569,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Ability_Warrior_BattleShout',
-            aura: function (count) { return { impbattleshout: count * 0.05 } },
+            aura: function (count: number) { return { impbattleshout: count * 0.05 } },
          },
          {
             i: 1581,
@@ -593,7 +593,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'Ability_DualWield',
-            aura: function (count) { return { offmod: count * 0.05 } },
+            aura: function (count: number) { return { offmod: count * 0.05 } },
          },
          {
             i: 1542,
@@ -611,7 +611,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'INV_Sword_48',
-            aura: function (count) { return { executecost: count == 2 ? 5 : count * 2 } },
+            aura: function (count: number) { return { executecost: count == 2 ? 5 : count * 2 } },
          },
          {
             i: 155,
@@ -635,7 +635,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'Spell_Shadow_UnholyFrenzy',
-            aura: function (count) { return { enrage: count * 5 } },
+            aura: function (count: number) { return { enrage: count * 5 } },
          },
          {
             i: 168,
@@ -659,7 +659,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_Warrior_DecisiveStrike',
-            aura: function (count) { return { impslam: count } },
+            aura: function (count: number) { return { impslam: count } },
          },
          {
             i: 165,
@@ -676,7 +676,7 @@ export const talents: any[] = [
             c: 0,
             enable: 12328,
             iconname: 'Spell_Shadow_DeathPact',
-            aura: function (count) { return { deathwish: count } },
+            aura: function (count: number) { return { deathwish: count } },
          },
          {
             i: 1543,
@@ -694,7 +694,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_Rogue_Sprint',
-            aura: function (count) { return { impintercept: count * 5 } },
+            aura: function (count: number) { return { impintercept: count * 5 } },
          },
          {
             i: 1541,
@@ -712,7 +712,7 @@ export const talents: any[] = [
             y: 5,
             c: 0,
             iconname: 'Spell_Nature_AncestralGuardian',
-            aura: function (count) { return { berserkerbonus: count * 5 } },
+            aura: function (count: number) { return { berserkerbonus: count * 5 } },
          },
          {
             i: 156,
@@ -740,7 +740,7 @@ export const talents: any[] = [
             ],
             c: 0,
             iconname: 'Ability_GhoulFrenzy',
-            aura: function (count) { return { flurry: count == 0 ? 0 : 5 + count * 5 } },
+            aura: function (count: number) { return { flurry: count == 0 ? 0 : 5 + count * 5 } },
          },
          {
             i: 167,
@@ -761,7 +761,7 @@ export const talents: any[] = [
             c: 0,
             iconname: 'Spell_Nature_BloodLust',
             enable: 23894,
-            aura: function (count) { return { bloodthirst: count } },
+            aura: function (count: number) { return { bloodthirst: count } },
          }
       ]
    },
@@ -790,7 +790,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'INV_Shield_06',
-            aura: function (count) { return { block: count, blockragechance: count * 20 } },
+            aura: function (count: number) { return { block: count, blockragechance: count * 20 } },
          },
          {
             i: 138,
@@ -814,7 +814,7 @@ export const talents: any[] = [
             y: 0,
             c: 0,
             iconname: 'Spell_Nature_MirrorImage',
-            aura: function (count) { return { defense: count * 2 } },
+            aura: function (count: number) { return { defense: count * 2 } },
          },
          {
             i: 142,
@@ -832,7 +832,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Ability_Racial_BloodRage',
-            aura: function (count) { return { bloodragebonus: count == 2 ? 5 : count * 2 } },
+            aura: function (count: number) { return { bloodragebonus: count == 2 ? 5 : count * 2 } },
          },
          {
             i: 140,
@@ -856,7 +856,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Spell_Holy_Devotion',
-            aura: function (count) { return { armormod: count * 2 } },
+            aura: function (count: number) { return { armormod: count * 2 } },
          },
          {
             i: 141,
@@ -880,7 +880,7 @@ export const talents: any[] = [
             y: 1,
             c: 0,
             iconname: 'Spell_Magic_MageArmor',
-            aura: function (count) { return { stunresist: count * 3 } },
+            aura: function (count: number) { return { stunresist: count * 3 } },
          },
          {
             i: 153,
@@ -900,7 +900,7 @@ export const talents: any[] = [
             ],
             c: 0,
             iconname: 'Spell_Holy_AshesToAshes',
-            aura: function (count) { return { laststand: count } },
+            aura: function (count: number) { return { laststand: count } },
          },
          {
             i: 145,
@@ -924,7 +924,7 @@ export const talents: any[] = [
             ],
             c: 0,
             iconname: 'Ability_Defend',
-            aura: function (count) { return { extrablock: count } },
+            aura: function (count: number) { return { extrablock: count } },
          },
          {
             i: 147,
@@ -944,7 +944,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Ability_Warrior_Revenge',
-            aura: function (count) { return { imprevenge: count * 15 } },
+            aura: function (count: number) { return { imprevenge: count * 15 } },
          },
          {
             i: 144,
@@ -968,7 +968,7 @@ export const talents: any[] = [
             y: 2,
             c: 0,
             iconname: 'Ability_Warrior_InnerRage',
-            aura: function (count) { return { threatmod: count * 3 } },
+            aura: function (count: number) { return { threatmod: count * 3 } },
          },
          {
             i: 146,
@@ -988,7 +988,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'Ability_Warrior_Sunder',
-            aura: function (count) { return { impsunderarmor: count } },
+            aura: function (count: number) { return { impsunderarmor: count } },
          },
          {
             i: 151,
@@ -1008,7 +1008,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'Ability_Warrior_Disarm',
-            aura: function (count) { return { impdisarm: count } },
+            aura: function (count: number) { return { impdisarm: count } },
          },
          {
             i: 143,
@@ -1026,7 +1026,7 @@ export const talents: any[] = [
             y: 3,
             c: 0,
             iconname: 'Spell_Nature_Reincarnation',
-            aura: function (count) { return { imptaunt: count } },
+            aura: function (count: number) { return { imptaunt: count } },
          },
          {
             i: 150,
@@ -1044,7 +1044,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_Warrior_ShieldWall',
-            aura: function (count) { return { impshieldwall: count == 2 ? 5 : count * 3 } },
+            aura: function (count: number) { return { impshieldwall: count == 2 ? 5 : count * 3 } },
          },
          {
             i: 152,
@@ -1060,7 +1060,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_ThunderBolt',
-            aura: function (count) { return { concussionblow: count } },
+            aura: function (count: number) { return { concussionblow: count } },
          },
          {
             i: 149,
@@ -1078,7 +1078,7 @@ export const talents: any[] = [
             y: 4,
             c: 0,
             iconname: 'Ability_Warrior_ShieldBash',
-            aura: function (count) { return { impshieldbash: count * 50 } },
+            aura: function (count: number) { return { impshieldbash: count * 50 } },
          },
          {
             i: 702,
@@ -1102,7 +1102,7 @@ export const talents: any[] = [
             y: 5,
             c: 0,
             iconname: 'INV_Sword_20',
-            aura: function (count) { return { onemod: count * 0.02 } },
+            aura: function (count: number) { return { onemod: count * 0.02 } },
          },
          {
             i: 148,
@@ -1123,7 +1123,7 @@ export const talents: any[] = [
             c: 0,
             enable: 'Shield Slam',
             iconname: 'INV_Shield_05',
-            aura: function (count) { return { shieldslam: count } },
+            aura: function (count: number) { return { shieldslam: count } },
          }
       ]
    }

@@ -6,6 +6,28 @@ questions.
 
 ## Phase 1 — Vite + TypeScript migration
 
+### Engine typing: noImplicitAny + core interfaces (branch `phase1/engine-types`)
+- `tsconfig.engine.json` (extends root, `noImplicitAny: true`) covers
+  `classes/`, `rng`, `globals`, `sim-worker`, `data/mode`;
+  `npm run typecheck` runs both projects. 448 implicit-any errors → 0.
+- New `js/engine-types.ts`: `PlayerConfig`/`TargetConfig`/`SimConfig`/
+  `SimResult`/`ProcDef`/`WorkerParams` + the worker callback types — the
+  shapes that cross module boundaries (worker protocol, DOM/headless
+  configs, reports). Config/report interfaces keep an index-signature escape
+  hatch until Phase 2 strict mode; the sprawling per-instance stat fields on
+  Player/Spell/Aura likewise stay index-signature-loose (documented debt).
+- Signatures annotated with real types where semantics are certain
+  (`player: Player`, `spell: Spell | null`, `weapon: Weapon`,
+  `config?: SimConfig`, enum results as `number`), explicit `any` where the
+  legacy calling conventions are genuinely loose (adjacent, delayedheroic).
+  Type-only imports (`import type`) keep the runtime graph acyclic. Zero
+  `@ts-expect-error` needed.
+- `callback_update(...args)`/`callback_finished(...args)` in the worker
+  message dispatch became explicit `args[0], args[1]` calls (same arity the
+  messages always had) — the only non-annotation edits.
+- Verified: both tsc projects clean, eslint/prettier clean, parity 11/11
+  byte-identical, minified worker-protocol bundle check exact.
+
 ### TypeScript rename, permissive compile (branch `phase1/ts-rename`)
 
 - Every `js/**/*.js` → `.ts` (git mv, history preserved); import specifiers

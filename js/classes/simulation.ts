@@ -1,4 +1,6 @@
 import { RNG } from '../rng.ts';
+import type { Player } from './player.ts';
+import type { ErrorCallback, FinishedCallback, SimConfig, UpdateCallback, WorkerParams } from '../engine-types.ts';
 import { getGlobalsDelta } from '../globals.ts';
 import { BlademasterFury, Shockwave, Slam, ThunderClap, Whirlwind } from './spell.ts';
 
@@ -43,20 +45,20 @@ export const TYPE = {
 
 export class SimulationWorker {
     [key: string]: any;
-    constructor(callback_finished, callback_update, callback_error) {
+    constructor(callback_finished: FinishedCallback, callback_update: UpdateCallback, callback_error: ErrorCallback) {
         this.worker = new Worker(new URL('../sim-worker.ts', import.meta.url), { type: 'module' });
-        this.worker.onerror = (...args) => {
+        this.worker.onerror = (...args: any[]) => {
             callback_error(...args);
             this.worker.terminate();
         };
-        this.worker.onmessage = (event) => {
+        this.worker.onmessage = (event: any) => {
             const [type, ...args] = event.data;
             switch (type) {
                 case TYPE.UPDATE:
-                    callback_update(...args);
+                    callback_update(args[0], args[1]);
                     break;
                 case TYPE.FINISHED:
-                    callback_finished(...args);
+                    callback_finished(args[0]);
                     this.worker.terminate();
                     break;
                 case TYPE.ERROR:
@@ -70,7 +72,7 @@ export class SimulationWorker {
         };
     }
 
-    start(params) {
+    start(params: WorkerParams) {
         params.globals = getGlobalsDelta();
         this.worker.postMessage(params);
     }
@@ -78,13 +80,18 @@ export class SimulationWorker {
 
 export class SimulationWorkerParallel {
     [key: string]: any;
-    constructor(threads, callback_finished, callback_update, callback_error) {
+    constructor(
+        threads: number,
+        callback_finished: FinishedCallback,
+        callback_update: UpdateCallback,
+        callback_error: ErrorCallback,
+    ) {
         this.threads = threads;
         this.callback_finished = callback_finished;
         this.callback_update = callback_update;
         this.states = [...Array(this.threads)];
         this.workers = this.states.map(
-            (_, i) =>
+            (_: any, i: any) =>
                 new SimulationWorker(
                     (data) => {
                         this.states[i] = { status: 1, data };
@@ -106,10 +113,10 @@ export class SimulationWorkerParallel {
 
     update() {
         if (this.error) return;
-        const completed = this.states.reduce((count, state) => count + ((state && state.status) || 0), 0);
+        const completed = this.states.reduce((count: any, state: any) => count + ((state && state.status) || 0), 0);
         if (completed >= this.states.length) {
             const result = this.states[0].data;
-            this.states.slice(1).forEach(({ data }) => {
+            this.states.slice(1).forEach(({ data }: any) => {
                 result.iterations += data.iterations;
                 result.totaldmg += data.totaldmg;
                 result.totalduration += data.totalduration;
@@ -154,7 +161,7 @@ export class SimulationWorkerParallel {
                             }
                         }
                     }
-                    function mergeWeapon(dst, src) {
+                    function mergeWeapon(dst: any, src: any) {
                         if (dst) {
                             dst.totaldmg += src.totaldmg;
                             dst.totalprocdmg += src.totalprocdmg;
@@ -174,7 +181,7 @@ export class SimulationWorkerParallel {
         } else {
             let iteration = 0;
             const data = { iterations: this.iterations, totaldmg: 0, totalduration: 0 };
-            this.states.forEach((state) => {
+            this.states.forEach((state: any) => {
                 if (!state) return;
                 iteration += state.status ? state.data.iterations : state.iteration;
                 data.totaldmg += state.data.totaldmg;
@@ -184,11 +191,11 @@ export class SimulationWorkerParallel {
         }
     }
 
-    start(params) {
+    start(params: WorkerParams) {
         params.globals = getGlobalsDelta();
         this.iterations = params.sim.iterations;
         let remain = params.sim.iterations;
-        this.workers.forEach((worker, i) => {
+        this.workers.forEach((worker: any, i: any) => {
             const current = Math.round(remain / (this.workers.length - i));
             remain -= current;
             params.player[3].logging = i == 0 && params.fullReport;
@@ -209,7 +216,12 @@ export class Simulation {
             batching: parseInt($('select[name="batching"]').val()),
         };
     }
-    constructor(player, callback_finished, callback_update, config) {
+    constructor(
+        player: Player,
+        callback_finished: FinishedCallback,
+        callback_update: UpdateCallback | null,
+        config?: SimConfig,
+    ) {
         if (!config) config = Simulation.getConfig();
         this.player = player;
         this.timesecsmin = config.timesecsmin;
@@ -248,7 +260,7 @@ export class Simulation {
         this.starttime = new Date().getTime();
         this.runAsync(1);
     }
-    runAsync(iteration) {
+    runAsync(iteration: any) {
         this.run();
         if (iteration == this.iterations) {
             this.endtime = new Date().getTime();
@@ -1144,7 +1156,7 @@ export class Simulation {
         if (!this.spread[dps]) this.spread[dps] = 1;
         else this.spread[dps]++;
     }
-    update(iteration) {
+    update(iteration: any) {
         if (this.cb_update) {
             this.cb_update(iteration, {
                 iterations: this.iterations,
@@ -1170,7 +1182,7 @@ export class Simulation {
     }
 }
 
-export function rng(min, max) {
+export function rng(min: number, max: number) {
     return ~~(RNG.random() * (max - min + 1) + min);
 }
 

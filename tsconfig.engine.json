@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        // Stricter project for the engine (PROMPT.MD Phase 1 step 4:
+        // noImplicitAny per-directory, starting with classes/). The UI stays
+        // on the permissive root config; `npm run typecheck` runs both.
+        "noImplicitAny": true
+    },
+    "include": [
+        "js/classes/**/*.ts",
+        "js/rng.ts",
+        "js/globals.ts",
+        "js/sim-worker.ts",
+        "js/data/mode.ts",
+        "js/vendor-globals.d.ts"
+    ]
+}
