@@ -728,11 +728,11 @@ class Simulation {
 }
 
 function rng(min, max) {
-    return ~~(Math.random() * (max - min + 1) + min);
+    return ~~(RNG.random() * (max - min + 1) + min);
 }
 
 function rng10k() {
-    return ~~(Math.random() * 10000);
+    return ~~(RNG.random() * 10000);
 }
 
 function avg(min, max) {
